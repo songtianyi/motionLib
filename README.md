@@ -6,7 +6,7 @@ The  algorithm repository will not update any more,so i deleted it, and start a 
 
 **brief**: motionLib is a small lib in computer animation/graphic project, i used it in  data compression and motion synthesis. 
 
-**note**: these files may depend on each other,in most cases, you need to include them all in your project. 
+**note**: these files may depend on each other,in most cases, you need to include them all in your project. And the CASEParser class is absent for license issue.
 
 
 #*Catalog*
