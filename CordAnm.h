@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef DIRECTX_ENABLE
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
+#endif
 
 struct HCordAnmHeader
 {

@@ -98,7 +98,7 @@ void GLPOS::getGLPos(CVector3f *glPos,\
 								{1,0,0,poskey[posCnt*nClipNum + i].x},
 								{0,1,0,poskey[posCnt*nClipNum + i].y},
 								{0,0,1,poskey[posCnt*nClipNum + i].z},
-								{0,0,0,1}
+								{0,0,0,1}//right
 							};
 							memcpy(offset,tmp,sizeof(tmp));
 						}
@@ -151,8 +151,6 @@ void GLPOS::getGLPos(CVector3f *glPos,\
 					}
 					else
 					{
-						//float E[4] = {offset[0][3],offset[1][3],offset[2][3],1};
-						//__matrixMulti441(E,&M [ parent_of[j]*16 ],E );
 						float E[4] = {0,0,0,1};
 						 __matrixMultiXYZ(E,(const float *)& M[ j*16 ],(const float *)E,4,4,1);
 						memcpy(&glPos[j*nClipNum+i],E,3*sizeof(float));

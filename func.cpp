@@ -5,7 +5,7 @@ void __matrixMultiXYZ(float *rs,const float *a,const float *b,const int X,const 
     float *tmp = new float[X*Z];
 	for(int i = 0;i < X*Z;i++)
 	{
-		tmp[i] = 0;
+		tmp[i] = 0.0f;
 	}
     for(int i = 0;i < X;i++)
     {
@@ -32,7 +32,7 @@ void 	Pitch(CVector3f tarVec,CVector3f curVec,float &pitch)//x
 		pitch = 0;return;
 	}
 	float dot = dotpdut(tarVec,curVec);
-	if (dot < 0.9999 && dot > -0.9999) 
+	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(curVec,tarVec);
 		if(axis.x > 0)
@@ -61,7 +61,7 @@ void 	Yaw(CVector3f tarVec,CVector3f curVec,float &yaw)//y
 		yaw = 0;return;
 	}
 	float dot = dotpdut(tarVec,curVec);
-	if (dot < 0.9999 && dot > -0.9999) 
+	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(tarVec,curVec);
 		if(axis.y > 0)
@@ -90,7 +90,7 @@ void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll)//z
 		roll = 0;return;
 	}
 	float dot = dotpdut(tarVec,curVec);
-	if (dot < 0.9999 && dot > -0.9999) 
+	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(tarVec,curVec);
 		if(axis.z > 0)
@@ -106,4 +106,49 @@ void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll)//z
 	{
 		roll = 0;
 	}
+}
+
+CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
+{
+	//Local Variables
+	double	cosAngle,turnAngle;
+	CVector3f curVector,targetVector;
+	CQuaternion quat(0,0,0,1);
+	double IK_POS_THRESH = 0.000171473;
+	// SEE IF I AM ALREADY CLOSE ENOUGH
+	if (euclideanDist(curEnd, desireEnd) > IK_POS_THRESH){
+			// CREATE THE VECTOR TO THE CURRENT EFFECTOR POS
+			curVector	= curEnd	- root;
+			// CREATE THE DESIRED EFFECTOR POSITION VECTOR
+			targetVector= desireEnd - root;
+			// NORMALIZE THE VECTORS (EXPENSIVE, REQUIRES A SQRT)
+			curVector.normalize();
+			targetVector.normalize();
+			// THE DOT PRODUCT GIVES ME THE COSINE OF THE DESIRED ANGLE
+			cosAngle = dotpdut(targetVector,curVector);
+
+			assert(! (fabs(cosAngle)-0.0000001 > 1));//fabscosAngle = [0,1]
+			// IF THE DOT PRODUCT RETURNS 1.0, I DON'T NEED TO ROTATE AS IT IS 0 DEGREES
+			if(cosAngle < 0.999999)
+			{
+				// USE THE CROSS PRODUCT TO CHECK WHICH WAY TO ROTATE
+				CVector3f crossResult = cropdut(curVector,targetVector);
+				crossResult.print();
+				crossResult.normalize();			//normalize the vector
+
+
+				turnAngle = acos((float)cosAngle);	// GET THE ANGLE
+
+				//calculate quaternion
+				CQuaternion quat(\
+					crossResult.x*sin(turnAngle/2),\
+					crossResult.y*sin(turnAngle/2),\
+					crossResult.z*sin(turnAngle/2),\
+					cos(turnAngle/2));
+
+				quat.normalize();
+				return quat;
+			}
+	}
+	return quat;
 }

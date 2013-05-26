@@ -17,8 +17,10 @@ using namespace std;
 #define BVH_MAX_FRAME 1000
 #endif
 
+#ifdef MS_BUILD_ENV
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
+#endif
 
 struct HBVHJoint
 {
@@ -48,7 +50,7 @@ struct HBVHHead
 };
 
 /*
- *@brief parse the data in BVH file 
+ *@brief parse the data in BVH file
 	or restore the data to BVH file
  */
 class CBVHParser

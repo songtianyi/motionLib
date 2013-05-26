@@ -17,7 +17,9 @@
 #define INERTIATOOBJECT 2
 #endif
 
+#ifdef MS_BUILD_ENV
 #pragma warning(disable:4244)
+#endif
 
 class CQuaternion;
 
@@ -54,6 +56,10 @@ public:
         friend double       manhattnDist(const CVector3f &a, const CVector3f &b);//self defined manhattn distance
 		friend double		euclideanDist(const CVector3f &a, const CVector3f &b);//euclidean distance
 
+
+		//set
+		void setXYZ(const float x,const float y,const float z);
+
         /*vector3f as euler angle*/
         ///////////////////////////////
         CQuaternion     toQuat(const int type);//transform to quaternion
@@ -61,15 +67,15 @@ public:
         CVector3f       canonized(void)const;//not be changed
         void            canonize(void);//
         ///////////////////////////////
-		
+
 		CVector3f normalized(void)const;
 		void normalize(void);//changed
 
 		void print(void) const;
-		
+
 
 public:
-        float x,y,z;//pitch heading bank,degree
+        float x,y,z;//if this is euler angle,pitch = x heading=y bank=z,float in degree
 };
 
 //inline float CVector3f::operator*( const CVector3f &a ) const {

@@ -33,11 +33,11 @@ public:
 		CQuaternion &		operator=( const CQuaternion &a );
 		CQuaternion			operator+( const CQuaternion &a ) const;
 		CQuaternion &		operator+=( const CQuaternion &a );
-		CQuaternion			operator-( const CQuaternion &a ) const;//each element minus the corresponding element in a
+		CQuaternion			operator-( const CQuaternion &a ) const;//(x-a,y-a,z-a,w-a)
 		CQuaternion &		operator-=( const CQuaternion &a );
-		CQuaternion			operator*( const CQuaternion &a ) const;//cross product of two quaternions
-		CQuaternion			operator*( const float a ) const;//multiply each element  with a
-		CQuaternion			operator/(const float a)const;//divide each element with a
+		CQuaternion			operator*( const CQuaternion &a ) const;//cross product
+		CQuaternion			operator*( const float a ) const;//(x*a,y*a,z*a,w*a)
+		CQuaternion			operator/(const float a)const;//(x/a,y/a,z/a,w/a)
 		CQuaternion &		operator*=( const CQuaternion &a );
 		CQuaternion &		operator*=( const float a );
 		
@@ -48,7 +48,7 @@ public:
 
 		
 
-        CVector3f toEulerAngle(const int type);
+        CVector3f toEulerAngle(const int type);// to euler angle
         HMat33 toHMat33(void) const;
 		HMat44 toHMat44(void) const;
 

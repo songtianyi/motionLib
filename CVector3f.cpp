@@ -8,6 +8,10 @@ CVector3f::CVector3f()
     //ctor
     x = y = z = 0.0f;
 }
+void CVector3f::setXYZ(const float x,const float y,const float z)
+{
+	this->x = x; this->y = y; this->z = z;
+}
 CVector3f::CVector3f(const float x,const float y,const float z)
 {
     this->x = x; this->y = y; this->z = z;
