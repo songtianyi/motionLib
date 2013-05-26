@@ -19,7 +19,7 @@ CAAP::~CAAP()
 CQuaternion CAAP::toQuat() const {
 	float a, s, c;
 	a = angle * ( H3DMath::M_DEG2RAD * 0.5f );
-	s = sin(a); c = cos(a);
+	s = sin( a ); c = cos( a );
 	return CQuaternion(x*s,y*s,z*s,c);
 }
 CQuaternion CAAP::exp()const

@@ -1,3 +1,15 @@
+
+/**
+ * CQuaternion.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
 #ifndef CQUATERNION_H
 #define CQUATERNION_H
 
@@ -16,7 +28,7 @@ class HMat33;
 class HMat44;
 class CAAP;
 
-/*
+/**
  *@brief quaternion operations
  *		result quaternions are not normalized!
  */
@@ -40,13 +52,13 @@ public:
 		CQuaternion			operator/(const float a)const;//(x/a,y/a,z/a,w/a)
 		CQuaternion &		operator*=( const CQuaternion &a );
 		CQuaternion &		operator*=( const float a );
-		
+
 
 		friend CQuaternion	operator*( const float a, const CQuaternion &b );
 		friend CQuaternion	diff(const CQuaternion &a,const CQuaternion &b);//if b*diff = a, calculate diff
 		friend float		dotpdut(const CQuaternion &a,const CQuaternion &b);//dot product
 
-		
+
 
         CVector3f toEulerAngle(const int type);// to euler angle
         HMat33 toHMat33(void) const;

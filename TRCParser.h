@@ -1,3 +1,15 @@
+
+/**
+ * TRCParser.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
 #ifndef TRCPARSER_H
 #define TRCPARSER_H
 
@@ -9,7 +21,7 @@
 #pragma warning(disable:4996)
 #endif
 
-/*
+/**
  *@brief TRC File header, call alloc to allocate memory ,dealloc to release.
  **/
 struct HTRCHeader

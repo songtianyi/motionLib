@@ -1,5 +1,18 @@
-#ifndef _FPC_H
-#define _FPC_H
+
+/**
+ * FPC.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
+
+#ifndef FPC_H
+#define FPC_H
 
 
 #include <assert.h>
@@ -7,11 +20,8 @@
 #include <vector>
 #include "Huffman.h"
 
-#ifndef _GABS_
+
 #define GABS(x) (x<0?(-x):x)
-#endif
-
-
 #define FPC_SENSITIVITY (1<<13)
 
 /*
@@ -29,7 +39,7 @@ public:
 
 	//quantize double to unsigned short, highest bit to remark whether the double data is bigger than 1 or not
 	void quantize64To15(const double *_64mat,unsigned short *_16mat,const int row,const int col,int *exceed);
-	
+
 	//be care of the first frame
 	//get matrix of predicted value ,matrix to indicate the dist is positive or negative, bit num of predicted value
 	void predict16(const unsigned short *_16mat,unsigned short *predMat,bool *signMat,int *bitsCnt,const int row,const int col);
@@ -37,7 +47,7 @@ public:
 
 	//stastic the frequency of pre-zero and successive-zero length[2,9]
 	void statistic(const int *bitsCnt,int *pZeroNum,int *equalZeroCnt,const int row,const int col);
-	
+
 	//
 	//output huffman to buffer
 	void encodeHuffmanTable(const CHuffman *hf);
@@ -50,7 +60,7 @@ public:
 		const int row,const int col);
 	//decode quantized matrix
 	void decode16mat(unsigned short *_16mat,const CHuffman *hf,const int row,const int col);
-	
+
 	void encodePredMat16P(const unsigned short *predMat,const bool *signMat,\
 		const int *bitsCnt,const int *equalZeroCnt,\
 		const CHuffman *hf,\
@@ -63,7 +73,7 @@ public:
 	//decode
 	void decode64mat(unsigned short *_16mat,double *mat,const int row,const int col);
 
-	
+
 
 
 	//remember to initialize bitBuffer, bitBufferCnt

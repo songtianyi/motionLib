@@ -1,3 +1,16 @@
+
+/**
+ * CVector3f.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
+
 #ifndef CVECTOR3F_H
 #define CVECTOR3F_H
 

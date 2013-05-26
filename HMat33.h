@@ -1,15 +1,29 @@
+
+/**
+ * HMat33.h
+ *
+ * Copyright (c) 2013, www.horizon3d.com.cn/‎Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
 #ifndef HMat33_H
 #define HMat33_H
 #include "CVector3f.h"
 
 
 #include <string.h>
+#include <iostream>
+
 class CQuaternion;
 class HMat44;
 
-#ifndef ID_INLINE
+
 #define ID_INLINE inline
-#endif
+
 
 class HMat33
 {
@@ -33,8 +47,8 @@ public:
 
 	friend HMat33	operator*( const float a, const HMat33 &mat );
 
-	HMat33			Transpose( void ) const;	// returns transpose
-	HMat33 &		TransposeSelf( void );
+    HMat33          Transpose( void );
+    void            TransposeSelf( void );
 
 	CVector3f		toAngles( void ) const;//transform to euler angles
 	CQuaternion		toQuat( void ) const;//transform to quaternion
@@ -159,5 +173,10 @@ ID_INLINE HMat33 &HMat33::operator-=( const HMat33 &a ) {
 ID_INLINE HMat33 operator*( const float a, const HMat33 &mat ) {
 	return mat * a;
 }
-
+ID_INLINE HMat33 HMat33::Transpose()
+{
+    HMat33 t = *this;
+    t.TransposeSelf();
+    return t;
+}
 #endif

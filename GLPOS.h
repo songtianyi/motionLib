@@ -1,3 +1,16 @@
+
+/**
+ * GLPOS.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
+
 #ifndef GLPOS_H
 #define GLPOS_H
 
@@ -16,7 +29,7 @@ public:
 	~GLPOS(void);
 	/*get global position, exclude helper object*/
 	void getGLPos(CVector3f *glPos,const ActionHeader *pAct,const AnmHeader *pAnm,const CQuaternion *rotkey,const CVector3f *poskey);
-	
+
 	/*calculate all frames of certain object*/
 	/*input all poskey and rotkey*/
 	void getGLPos(CVector3f *glPos,const ActionHeader *pAct,const AnmHeader *pAnm,const CQuaternion *rotkey,const CVector3f *poskey,const int boneIndex);

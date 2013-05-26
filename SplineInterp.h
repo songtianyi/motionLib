@@ -1,3 +1,15 @@
+
+/**
+ * SplineInterp.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
 #ifndef SPLINEINTERP_H
 #define SPLINEINTERP_H
 
@@ -11,8 +23,8 @@ public:
 	/*
 	input:
 	x
-	y 
-	the number of point 
+	y
+	the number of point
 	First derivative at 0 and n-1
 
 	output:

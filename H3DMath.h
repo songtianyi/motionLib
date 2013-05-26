@@ -1,4 +1,16 @@
-﻿#ifndef H3DMATH_H
+﻿
+/**
+ * H3DMath.h
+ *
+ * Copyright (c) 2013, www.horizon3d.com.cn/Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
+#ifndef H3DMATH_H
 #define H3DMATH_H
 
 #include <cmath>
@@ -13,7 +25,7 @@ public:
 	static double				ACos64( const float a );			// arc cosine with 64 bits precision
 	static double               WRAPPI(const double a);
 	static int                  complf(const double x);
-	
+
 	//get exponent
 	static int _exponentOf(const double v);
 	static int _exponentOf(const float v);
@@ -35,7 +47,7 @@ public:
 	static const double			M_SEC2MS;					// seconds to milliseconds multiplier
 	static const double			M_MS2SEC;					// milliseconds to seconds multiplier
 	static const double			INFINITY;					// huge number which should be larger than any valid number used
-	static const double         COMP_EPS;                   //compare epsilon
+	static const double         LF_COMP_EPS;                   //compare epsilon
 };
 
 /**
@@ -47,7 +59,7 @@ public:
  *complf(a-b) <= 0, a <= b or a - b <= -eps
  *complf(a-b) >= 0, a >= b or a - b >= eps
  */
-inline int H3DMath::complf(double x){ return x < -H3DMath::COMP_EPS?-1:((x < H3DMath::COMP_EPS)?0:1);}
+inline int H3DMath::complf(double x){ return x < -H3DMath::LF_COMP_EPS?-1:((x < H3DMath::LF_COMP_EPS)?0:1);}
 
 inline int H3DMath::_exponentOf(const double v)
 {

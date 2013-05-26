@@ -1,5 +1,23 @@
+
+/**
+ * CBVHParser.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
 #ifndef CBVHPARSER_H
 #define CBVHPARSER_H
+
+/**
+ *@brief parse BVH file
+	 restore the data to BVH file
+ */
+
 
 #include <cstdio>
 #include <cstring>
@@ -9,13 +27,9 @@ using namespace std;
 
 
 
-#ifndef BVH_MAX_JOINT
-#define BVH_MAX_JOINT 256
-#endif
 
-#ifndef BVH_MAX_FRAME
+#define BVH_MAX_JOINT 256
 #define BVH_MAX_FRAME 1000
-#endif
 
 #ifdef MS_BUILD_ENV
 #pragma warning(disable:4244)
@@ -36,28 +50,48 @@ struct HBVHHead
     int m_endSiteNum;//END SITE count
 
     int m_columNum;//column num
-    int m_frameNum;//frame count,row num
+    int m_frameNum;//frame count or row num
 
     float m_frameTime;//time per frame
 
     int *m_parentOf;
     bool *m_isEndSite;//note: you need to alloc memory your self, cause i don't know the memory size !
+    HBVHHead()
+    {
+        m_parentOf = 0;
+        m_isEndSite = 0;
+
+        m_jointNum = 0;
+        m_endSiteNum=0;
+        m_columNum=0;
+        m_frameNum=0;
+
+        m_frameTime = 0.0f;
+    }
     ~HBVHHead()
     {
         assert(m_parentOf == 0);
         assert(m_isEndSite== 0);
     }
+    void alloc()
+    {
+        m_parentOf = new int[BVH_MAX_JOINT+1];
+        m_isEndSite= new bool[BVH_MAX_JOINT+1];
+    }
+    void dealloc()
+    {
+        delete [] m_parentOf; m_parentOf = 0;
+        delete [] m_isEndSite; m_isEndSite = 0;
+    }
 };
 
-/*
- *@brief parse the data in BVH file
-	or restore the data to BVH file
- */
+
 class CBVHParser
 {
 public:
         CBVHParser();
         ~CBVHParser();
+        void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint);
         void parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,float *mat);
         void restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint *pJoint,const float *mat);
 };

@@ -1,9 +1,22 @@
+
+/**
+ * HMat44.h
+ *
+ * Copyright (c) 2013, www.horizon3d.com.cn/Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
 #ifndef HMat44_H
 #define HMat44_H
 
 #include <string.h>
 #include <assert.h>
 #include <math.h>
+#include <iostream>
+
 #ifndef ID_INLINE
 #define ID_INLINE inline
 #endif
@@ -32,6 +45,9 @@ public:
 
 			HMat44			InverseFast( void ) const;	// returns the inverse ( m * m.Inverse() = identity )
 			bool			InverseFastSelf( void );	// returns false if determinant is zero
+
+			HMat44          Transpose( void );
+			void            TransposeSelf( void );
 public:
 	float mat[4][4];
 };
@@ -80,15 +96,15 @@ ID_INLINE HMat44 HMat44::operator*( const HMat44 &a ) const {
 	return dst;
 }
 ID_INLINE HMat44 HMat44::operator+( const HMat44 &a ) const {
-	return HMat44( 
+	return HMat44(
 		mat[0][0] + a.mat[0][0], mat[0][1] + a.mat[0][1], mat[0][2] + a.mat[0][2], mat[0][3] + a.mat[0][3],
 		mat[1][0] + a.mat[1][0], mat[1][1] + a.mat[1][1], mat[1][2] + a.mat[1][2], mat[1][3] + a.mat[1][3],
 		mat[2][0] + a.mat[2][0], mat[2][1] + a.mat[2][1], mat[2][2] + a.mat[2][2], mat[2][3] + a.mat[2][3],
 		mat[3][0]+ a.mat[3][0], mat[3][1] + a.mat[3][1], mat[3][2] + a.mat[3][2], mat[3][3] + a.mat[3][3] );
 }
-    
+
 ID_INLINE HMat44 HMat44::operator-( const HMat44 &a ) const {
-	return HMat44( 
+	return HMat44(
 		mat[0][0] - a.mat[0][0], mat[0][1] - a.mat[0][1], mat[0][2] - a.mat[0][2], mat[0][3] - a.mat[0][3],
 		mat[1][0] - a.mat[1][0], mat[1][1] - a.mat[1][1], mat[1][2] - a.mat[1][2], mat[1][3] - a.mat[1][3],
 		mat[2][0] - a.mat[2][0], mat[2][1] - a.mat[2][1], mat[2][2] - a.mat[2][2], mat[2][3] - a.mat[2][3],
@@ -132,5 +148,10 @@ ID_INLINE HMat44 HMat44::InverseFast( void ) const {
 	assert( r );
 	return invMat;
 }
-
+ID_INLINE HMat44 HMat44::Transpose()
+{
+    HMat44 t = *this;
+    t.TransposeSelf();
+    return t;
+}
 #endif

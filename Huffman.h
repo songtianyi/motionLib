@@ -1,3 +1,16 @@
+
+/**
+ * Huffman.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Jimin Zhou <>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
+ */
+
+
 #ifndef CHUFFMAN_H
 #define CHUFFMAN_H
 

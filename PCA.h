@@ -1,9 +1,19 @@
-#ifndef __PCA_H__
-#define __PCA_H__
 
 /**
- *PCA
+ * PCA.h
+ *
+ * Copyright (c) 2013, Dalian Nationalities University. All Rights  Reserved.
+ * Tianyi Song <songtianyi630@163.com>
+ *
+ * You can use this library in your project, but do not redistribute it and/or modify
+ * it.
+ *
  */
+
+#ifndef PCA_H
+#define PCA_H
+
+
 
 #include <vector>
 #include <cstring>
@@ -31,17 +41,17 @@ public:
 	void getCovaMat(const double *mat,const int row,const int col,double *covMat);
 
 private:
-	
-	
+
+
 	//calculate Eigenvector
     int _calEigenVector(double CovMatrix[], int n, double Eigen[], double EigenVector[]);
     void _Householder_Tri_Symetry_Diagonal(double a[], int n, double q[], double b[], double c[]);
     int _Tri_Symmetry_Diagonal_Eigenvector(int n, double b[], double c[], double q[], double eps, int l);
-	
+
 	//sort
 	void _mySwap(int *a,int *b);
     void _quickSort(int left,int right,double array[],int id[]);
-	
+
 	//matrix operation
 	void _matrixMulti(double *rs,const double *a,const double *b,const int r,const int s,const int t);
 	void _matrixTransposition(double *m,const int row,const int col);

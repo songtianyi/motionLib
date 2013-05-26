@@ -85,5 +85,13 @@ bool HMat44::InverseFastSelf(void)//
 	mat[3*4+2] = -r3[1][0];
 	mat[3*4+3] = -r3[1][1];
 
-	return true;	
+	return true;
 }
+
+void HMat44::TransposeSelf()
+{
+    for(int i = 0;i < 3;i++)
+        for(int j = i+1;j < 4;j++)
+            std::swap(this->mat[i][j],this->mat[i][j]);
+}
+

@@ -16,4 +16,4 @@ const double	H3DMath::M_RAD2DEG		= 180.0 / PI;
 const double	H3DMath::M_SEC2MS		= 1000.0;
 const double	H3DMath::M_MS2SEC		= 0.001;
 //const double	H3DMath::INFINITY		= 1e30f; _builtin_inf() instead
-const double    H3DMath::COMP_EPS        = 1e-6; //compare epsilon
+const double    H3DMath::LF_COMP_EPS        = 1e-6; //compare epsilon

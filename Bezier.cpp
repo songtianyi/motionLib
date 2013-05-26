@@ -19,14 +19,15 @@ void Bezier::cubicBezierLeastsquare(const CVector3f *q,const int n,CVector3f &p1
     CVector3f p0 = q[0],p3 = q[n-1];
 
     double A1 = 0,A2 = 0, A12 = 0;
-    CVector3f C1(0,0,0),C2(0,0,0);//0 0 0
+    CVector3f C1(0,0,0),C2(0,0,0);
 
     for(int i = 0;i < n;i++)
     {
-        double t = i*1.0/(n-1);
+        double t    = i*1.0/(n-1);
         double t2   = t*t , t3 = t2*t , t4   = t3*t;
 
-        double _t   = 1-t , _t2  = _t*_t , _t3  = _t2*_t, _t4  = _t3*_t;
+        double _t   = 1-t ;
+        double _t2  = _t*_t , _t3  = _t2*_t, _t4  = _t3*_t;
 
         A1 += t2 * _t4;
         A2 += t4 * _t2;
@@ -56,6 +57,10 @@ void Bezier::cubicBezierLeastsquare(const double *q,const int n,const int dim,do
 	double *C1 = new double[dim]; memset(C1,0,sizeof(double)*dim);
 	double *C2 = new double[dim]; memset(C2,0,sizeof(double)*dim);
 
+	#ifndef __STDC_IEC_559__
+	assert(1 == 0);/*Maybe there are some problems with memset, which is used to initialize double value */
+	#endif
+
     for(int i = 0;i < n;i++)
     {
         double t = i*1.0/(n-1);
@@ -66,7 +71,7 @@ void Bezier::cubicBezierLeastsquare(const double *q,const int n,const int dim,do
         A1 += t2 * _t4;
         A2 += t4 * _t2;
         A12+= t3 * _t3;
-        
+
 		for(int j = 0;j < dim;j++)
 		{
 			double tmp = (q[i*dim+j] - _t3*p0[j] - t3*p3[j]);
@@ -93,8 +98,8 @@ void Bezier::cubicBezierLeastsquare(const double *q,const int n,const int dim,do
 
 int Bezier::cubicBezierFitting(const CVector3f *q,const int n,const CVector3f &P1,const CVector3f &P2)
 {
+    /*p(t) = P0 * (1-t)^3 + P1 * 3*t(1-t)^2 + P2 * 3*t^2*(1-t) + P3 * t^3*/
     CVector3f P0 = q[0],P3 = q[n-1];
-    //p(t) = P0 * (1-t)^3 + P1 * 3*t(1-t)^2 + P2 * 3*t^2*(1-t) + P3 * t^3
     CVector3f a,b,c,p;
     c.x = 3 * (P1.x - P0.x);
     c.y = 3 * (P1.y - P0.y);
