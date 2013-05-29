@@ -24,17 +24,17 @@
  *@input matrix b, row = Y col = Z
  *@output matrix res, row = X col = Z
  **/
-void	__matrixMultiXYZ(float *res,const float *a,const float *b,const int X,const int Y,const int Z);
+void	__matrixMultiXYZ(FLOAT *res,const FLOAT *a,const FLOAT *b,const int X,const int Y,const int Z);
 
 
 /*
  *
  */
-void	Pitch(CVector3f tarVec,CVector3f curVec,float &pitch);//x
+void	Pitch(CVector3f tarVec,CVector3f curVec,FLOAT &pitch);//x
 
-void 	Yaw(CVector3f tarVec,CVector3f curVec,float &yaw);//y
+void 	Yaw(CVector3f tarVec,CVector3f curVec,FLOAT &yaw);//y
 
-void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll);//z
+void 	Roll(CVector3f tarVec,CVector3f curVec,FLOAT &roll);//z
 
 
 

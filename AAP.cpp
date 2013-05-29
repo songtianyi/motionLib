@@ -3,7 +3,7 @@
 CAAP::CAAP(void)
 {
 }
-CAAP::CAAP(const float theta,const float x,const float y,const float z)
+CAAP::CAAP(const FLOAT theta,const FLOAT x,const FLOAT y,const FLOAT z)
 {
 	this->angle = theta;
 	this->x =x;
@@ -17,10 +17,10 @@ CAAP::~CAAP()
 }
 
 CQuaternion CAAP::toQuat() const {
-	float a, s, c;
+	FLOAT a, s, c;
 	a = angle * ( H3DMath::M_DEG2RAD * 0.5f );
 	s = sin( a ); c = cos( a );
-	return CQuaternion(x*s,y*s,z*s,c);
+	return CQuaternion( ( FLOAT )x*s,( FLOAT )y*s,( FLOAT )z*s,c);
 }
 CQuaternion CAAP::exp()const
 {

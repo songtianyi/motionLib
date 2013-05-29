@@ -34,9 +34,12 @@ public:
 	/*input all poskey and rotkey*/
 	void getGLPos(CVector3f *glPos,const ActionHeader *pAct,const AnmHeader *pAnm,const CQuaternion *rotkey,const CVector3f *poskey,const int boneIndex);
 
+    void getGLPosOneFrameAllBone(CVector3f *glPos,\
+					 const ActionHeader *pAct,const AnmHeader *pAnm,\
+					 const CQuaternion *rotkey,const CVector3f *poskey,const int frameIndex);
 	void __getParentNodesID(int *father,const ActionHeader *pAct,const AnmHeader *pAnm);
-	void __getOffsetMat(float rs[4][4],int i,int p,const AnmHeader *pAnm);
-	void __getOffsetMat(float rs[4],int i,int p,const AnmHeader *pAnm);
-	void __44Transpose(float mat[4][4]);
+	void __getOffsetMat(FLOAT rs[4][4],int i,int p,const AnmHeader *pAnm);
+	void __getOffsetMat(FLOAT rs[4],int i,int p,const AnmHeader *pAnm);
+	void __44Transpose(FLOAT mat[4][4]);
 };
 #endif

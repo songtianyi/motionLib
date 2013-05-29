@@ -69,7 +69,7 @@ struct HTRCHeader
 	void alloc()
 	{
 		m_frameSeq = new int[m_numFrames];
-                m_timeSeq = new double[m_numFrames];
+        m_timeSeq = new double[m_numFrames];
 		m_markerSeq = new int[m_numMarkers];
 	}
 	void dealloc()
@@ -87,7 +87,7 @@ public:
 	CTRCParser(void);
 	~CTRCParser(void);
 	void getTRCHeader(const char *dir,HTRCHeader *pHead);
-        void parse(const char *dir,HTRCHeader *pHead,double *mat);
-        void resotre(const char *dir,const HTRCHeader *pHead,const double *mat);
+    void parse(const char *dir,HTRCHeader *pHead,CVector3f *mat);
+    void resotre(const char *dir,const HTRCHeader *pHead,const CVector3f *mat);
 };
 #endif

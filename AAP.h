@@ -17,18 +17,20 @@
 
 #include "CVector3f.h"
 #include "CQuaternion.h"
+#include "def.h"
+
 
 class CAAP
 {
 public:
 	CAAP(void);
-	CAAP(const float theta,const float x,const float y,const float z);  /*constructor*/
+	CAAP(const FLOAT theta,const FLOAT x,const FLOAT y,const FLOAT z);  /*constructor*/
 	~CAAP(void);
 	CQuaternion				toQuat  ( void ) const;                 /*transform euler axis and angle pair to quaternion*/
 	CQuaternion				exp     ( void ) const;                 /*exponential,defined in <3D math primer for*/
                                                                     /*graphics and game development> page 170*/
 public:
-	float angle,x,y,z;                                              /*rotation angle in degree, rotation vector(x,y,z)*/
+	FLOAT angle,x,y,z;                                              /*rotation angle in degree, rotation vector(x,y,z)*/
 };
 
 

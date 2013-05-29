@@ -49,9 +49,17 @@ void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
         }
         else if( strcmp(buffer,"OFFSET") == 0 )
         {
+            #ifdef FLOAT_32
             fscanf(bvh,"%f%f%f",&pJoint[pHeader->m_jointNum].m_offset[0],\
                    &pJoint[pHeader->m_jointNum].m_offset[1],\
                    &pJoint[pHeader->m_jointNum].m_offset[2]);
+            #endif
+
+            #ifdef FLOAT_64
+            fscanf(bvh,"%lf%lf%lf",&pJoint[pHeader->m_jointNum].m_offset[0],\
+                   &pJoint[pHeader->m_jointNum].m_offset[1],\
+                   &pJoint[pHeader->m_jointNum].m_offset[2]);
+            #endif // FLOAT_64
         }
         else if( strcmp(buffer,"CHANNELS") == 0)
         {
@@ -89,15 +97,20 @@ void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
     }
     my.free();
     //end of construction
-
+#ifdef FLOAT_32
     fscanf(bvh," MOTION Frames:%d Frame Time:%f",&pHeader->m_frameNum,&pHeader->m_frameTime);
+#endif // FLOAT_32
+#ifdef FLOAT_64
+    fscanf(bvh," MOTION Frames:%d Frame Time:%lf",&pHeader->m_frameNum,&pHeader->m_frameTime);
+#endif // FLOAT_64
+
 
     assert((6 + (pHeader->m_jointNum - pHeader->m_endSiteNum - 1)*3) == pHeader->m_columNum);
     assert(pHeader->m_frameNum < BVH_MAX_FRAME);
     assert(pHeader->m_jointNum < BVH_MAX_JOINT);
     fclose( bvh ); bvh = 0;
 }
-void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,float *mat)
+void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,CVector3f *mat)
 {
     FILE *bvh = fopen( dir,"r" );
     if( bvh == NULL )
@@ -139,9 +152,18 @@ void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,float
         }
         else if( strcmp(buffer,"OFFSET") == 0 )
         {
+            #ifdef FLOAT_32
             fscanf(bvh,"%f%f%f",&pJoint[pHeader->m_jointNum].m_offset[0],\
                    &pJoint[pHeader->m_jointNum].m_offset[1],\
                    &pJoint[pHeader->m_jointNum].m_offset[2]);
+            #endif // FLOAT_32
+
+            #ifdef FLOAT_64
+            fscanf(bvh,"%lf%lf%lf",&pJoint[pHeader->m_jointNum].m_offset[0],\
+                   &pJoint[pHeader->m_jointNum].m_offset[1],\
+                   &pJoint[pHeader->m_jointNum].m_offset[2]);
+            #endif // FLOAT_64
+
         }
         else if( strcmp(buffer,"CHANNELS") == 0)
         {
@@ -179,23 +201,34 @@ void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,float
     }
     my.free();
     //end of construction
-
+    #ifdef FLOAT_32
     fscanf(bvh," MOTION Frames:%d Frame Time:%f",&pHeader->m_frameNum,&pHeader->m_frameTime);
-
+    #endif
+    #ifdef FLOAT_64
+    fscanf(bvh," MOTION Frames:%d Frame Time:%lf",&pHeader->m_frameNum,&pHeader->m_frameTime);
+    #endif // FLOAT_64
     assert((6 + (pHeader->m_jointNum - pHeader->m_endSiteNum - 1)*3) == pHeader->m_columNum);
     assert(pHeader->m_frameNum < BVH_MAX_FRAME);
     assert(pHeader->m_jointNum < BVH_MAX_JOINT);
-    int nFloatNum = pHeader->m_frameNum*pHeader->m_columNum;
+    assert(pHeader->m_columNum % 3 == 0);
+    int nVecNum = pHeader->m_frameNum*pHeader->m_columNum%3;
 
-    for(int i = 0;i < nFloatNum;i++)
+    for(int i = 0;i < nVecNum;i++)
     {
-        fscanf(bvh,"%f",&mat[i]);
+        #ifdef FLOAT_32
+        fscanf(bvh,"%f %f %f",&mat[i].x,&mat[i].y,&mat[i].z);
+        #endif // FLOAT_32
+
+        #ifdef FLOAT_64
+        fscanf(bvh,"%lf %lf %lf",&mat[i].x,&mat[i].y,&mat[i].z);
+        #endif // FLOAT_64
+
     }
 
     fclose( bvh ); bvh = 0;
 }
 
-void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint *pJoint,const float *mat)
+void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint *pJoint,const CVector3f *mat)
 {
     assert(pHeader->m_frameNum > 0 && pHeader->m_jointNum > 0);
     assert(pHeader->m_parentOf[1] == 0);//root joint is 1
@@ -244,14 +277,14 @@ void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint
     while(my.top() != 0){fprintf(re,"}\n");my.pop();}
     my.free();
     fprintf(re,"MOTION\nFrames: %d\nFrame Time: %f\n",pHeader->m_frameNum,pHeader->m_frameTime);
-
+    assert(pHeader->m_columNum % 3 == 0);
     for(int i = 0;i < pHeader->m_frameNum;i++)
     {
-        const float *array = &mat[i*pHeader->m_columNum];
-        fprintf(re,"%0.4f",array[0]);
+        const CVector3f *array = &mat[i*pHeader->m_columNum%3];
+        fprintf(re,"%0.4f %0.4f %0.4f",array[0].x,array[0].y,array[0].z);
         for(int j = 1;j < pHeader->m_columNum;j++)
         {
-            fprintf(re," %0.4f",array[j]);
+            fprintf(re," %0.4f %0.4f %0.4f",array[j].x,array[j].y,array[j].z);
         }
         fprintf(re,"\n");
     }

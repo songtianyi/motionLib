@@ -30,22 +30,22 @@ class HMat33
 public:
 	HMat33( void );
 	explicit HMat33( const CVector3f &x, const CVector3f &y, const CVector3f &z );
-	explicit HMat33( const float xx, const float xy, const float xz, const float yx, const float yy, const float yz, const float zx, const float zy, const float zz );
-	explicit HMat33( const float src[ 3 ][ 3 ] );
+	explicit HMat33( const FLOAT xx, const FLOAT xy, const FLOAT xz, const FLOAT yx, const FLOAT yy, const FLOAT yz, const FLOAT zx, const FLOAT zy, const FLOAT zz );
+	explicit HMat33( const FLOAT src[ 3 ][ 3 ] );
 
 	const CVector3f &	operator[]( int index ) const;
 	CVector3f &		operator[]( int index );
 	HMat33			operator-() const;
-	HMat33			operator*( const float a ) const;
+	HMat33			operator*( const FLOAT a ) const;
 	HMat33			operator*( const HMat33 &a ) const;
 	HMat33			operator+( const HMat33 &a ) const;
 	HMat33			operator-( const HMat33 &a ) const;
-	HMat33 &		operator*=( const float a );
+	HMat33 &		operator*=( const FLOAT a );
 	HMat33 &		operator*=( const HMat33 &a );
 	HMat33 &		operator+=( const HMat33 &a );
 	HMat33 &		operator-=( const HMat33 &a );
 
-	friend HMat33	operator*( const float a, const HMat33 &mat );
+	friend HMat33	operator*( const FLOAT a, const HMat33 &mat );
 
     HMat33          Transpose( void );
     void            TransposeSelf( void );
@@ -67,14 +67,14 @@ ID_INLINE HMat33::HMat33( const CVector3f &x, const CVector3f &y, const CVector3
 	mat[ 2 ].x = z.x; mat[ 2 ].y = z.y; mat[ 2 ].z = z.z;
 }
 
-ID_INLINE HMat33::HMat33( const float xx, const float xy, const float xz, const float yx, const float yy, const float yz, const float zx, const float zy, const float zz ) {
+ID_INLINE HMat33::HMat33( const FLOAT xx, const FLOAT xy, const FLOAT xz, const FLOAT yx, const FLOAT yy, const FLOAT yz, const FLOAT zx, const FLOAT zy, const FLOAT zz ) {
 	mat[ 0 ].x = xx; mat[ 0 ].y = xy; mat[ 0 ].z = xz;
 	mat[ 1 ].x = yx; mat[ 1 ].y = yy; mat[ 1 ].z = yz;
 	mat[ 2 ].x = zx; mat[ 2 ].y = zy; mat[ 2 ].z = zz;
 }
 
-ID_INLINE HMat33::HMat33( const float src[ 3 ][ 3 ] ) {
-	memcpy( mat, src, 3 * 3 * sizeof( float ) );
+ID_INLINE HMat33::HMat33( const FLOAT src[ 3 ][ 3 ] ) {
+	memcpy( mat, src, 3 * 3 * sizeof( FLOAT ) );
 }
 
 ID_INLINE const CVector3f &HMat33::operator[]( int index ) const {
@@ -91,7 +91,7 @@ ID_INLINE HMat33 HMat33::operator-() const {
 					-mat[1][0], -mat[1][1], -mat[1][2],
 					-mat[2][0], -mat[2][1], -mat[2][2] );
 }
-ID_INLINE HMat33 HMat33::operator*( const float a ) const {
+ID_INLINE HMat33 HMat33::operator*( const FLOAT a ) const {
 	return HMat33(
 		mat[0].x * a, mat[0].y * a, mat[0].z * a,
 		mat[1].x * a, mat[1].y * a, mat[1].z * a,
@@ -99,13 +99,13 @@ ID_INLINE HMat33 HMat33::operator*( const float a ) const {
 }
 ID_INLINE HMat33 HMat33::operator*( const HMat33 &a ) const {
 	int i, j;
-	const float *m1Ptr, *m2Ptr;
-	float *dstPtr;
+	const FLOAT *m1Ptr, *m2Ptr;
+	FLOAT *dstPtr;
 	HMat33 dst;
 
-	m1Ptr = reinterpret_cast<const float *>(this);
-	m2Ptr = reinterpret_cast<const float *>(&a);
-	dstPtr = reinterpret_cast<float *>(&dst);
+	m1Ptr = reinterpret_cast<const FLOAT *>(this);
+	m2Ptr = reinterpret_cast<const FLOAT *>(&a);
+	dstPtr = reinterpret_cast<FLOAT *>(&dst);
 
 	for ( i = 0; i < 3; i++ ) {
 		for ( j = 0; j < 3; j++ ) {
@@ -130,7 +130,7 @@ ID_INLINE HMat33 HMat33::operator-( const HMat33 &a ) const {
 		mat[1].x - a[1].x, mat[1].y - a[1].y, mat[1].z - a[1].z,
 		mat[2].x - a[2].x, mat[2].y - a[2].y, mat[2].z - a[2].z );
 }
-ID_INLINE HMat33 &HMat33::operator*=( const float a ) {
+ID_INLINE HMat33 &HMat33::operator*=( const FLOAT a ) {
 	mat[0].x *= a; mat[0].y *= a; mat[0].z *= a;
 	mat[1].x *= a; mat[1].y *= a; mat[1].z *= a;
 	mat[2].x *= a; mat[2].y *= a; mat[2].z *= a;
@@ -139,11 +139,11 @@ ID_INLINE HMat33 &HMat33::operator*=( const float a ) {
 }
 ID_INLINE HMat33 &HMat33::operator*=( const HMat33 &a ) {
 	int i, j;
-	const float *m2Ptr;
-	float *m1Ptr, dst[3];
+	const FLOAT *m2Ptr;
+	FLOAT *m1Ptr, dst[3];
 
-	m1Ptr = reinterpret_cast<float *>(this);
-	m2Ptr = reinterpret_cast<const float *>(&a);
+	m1Ptr = reinterpret_cast<FLOAT *>(this);
+	m2Ptr = reinterpret_cast<const FLOAT *>(&a);
 
 	for ( i = 0; i < 3; i++ ) {
 		for ( j = 0; j < 3; j++ ) {
@@ -170,7 +170,7 @@ ID_INLINE HMat33 &HMat33::operator-=( const HMat33 &a ) {
 
     return *this;
 }
-ID_INLINE HMat33 operator*( const float a, const HMat33 &mat ) {
+ID_INLINE HMat33 operator*( const FLOAT a, const HMat33 &mat ) {
 	return mat * a;
 }
 ID_INLINE HMat33 HMat33::Transpose()

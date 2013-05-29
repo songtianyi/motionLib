@@ -10,9 +10,15 @@ CQuaternion::CQuaternion()
 }
 void CQuaternion::print() const
 {
+    #ifdef FLOAT_32
 	printf("(w = %f,%f %f %f)",w,x,y,z);
+	#endif
+
+	#ifdef FLOAT_64
+	printf("(w = %0.9f,%0.9f %0.9f %f)",w,x,y,z);
+	#endif // FLOAT_64
 }
-CQuaternion::CQuaternion(const float x,const float y,const float z,const float w)
+CQuaternion::CQuaternion(const FLOAT x,const FLOAT y,const FLOAT z,const FLOAT w)
 {
     this->w = w; this->x = x; this->y = y; this->z = z;
 }
@@ -31,8 +37,8 @@ void CQuaternion::conjugate()
 }
 CQuaternion CQuaternion::log()
 {
-	float a = static_cast<float>(acos(w));
-	float sina = static_cast<float>(sin(a));
+	FLOAT a = static_cast<FLOAT>(acos(w));
+	FLOAT sina = static_cast<FLOAT>(sin(a));
 	CQuaternion ret;
 	ret.w = 0;
 	if (sina > 0)
@@ -49,9 +55,9 @@ CQuaternion CQuaternion::log()
 }
 CQuaternion CQuaternion::exp()
 {
-	float a = static_cast<float>(sqrt(x*x + y*y + z*z));
-	float sina = static_cast<float>(sin(a));
-	float cosa = static_cast<float>(cos(a));
+	FLOAT a = static_cast<FLOAT>(sqrt(x*x + y*y + z*z));
+	FLOAT sina = static_cast<FLOAT>(sin(a));
+	FLOAT cosa = static_cast<FLOAT>(cos(a));
 	CQuaternion ret;
 
 	ret.w = cosa;
@@ -72,14 +78,14 @@ CQuaternion CQuaternion::exp()
 
 CQuaternion CQuaternion::normalized() const
 {
-    double squmrt = sqrt(w*w+x*x+y*y+z*z);
+    FLOAT squmrt = sqrt(w*w+x*x+y*y+z*z);
     if( squmrt )
         return CQuaternion(x/squmrt,y/squmrt,z/squmrt,w/squmrt);
     return *this;
 }
 void CQuaternion::normalize()
 {
-    double squmrt = sqrt(w*w+x*x+y*y+z*z);
+    FLOAT squmrt = sqrt(w*w+x*x+y*y+z*z);
 	if(  squmrt )
 	{
         w = w/squmrt; x = x/squmrt; y = y/squmrt; z = z/squmrt;
@@ -94,28 +100,28 @@ CVector3f CQuaternion::toEulerAngle(const int type)
         r = this->conjugated();
     }
     //object to Inertia
-    double sp = -2.0 * (r.y*r.z - r.w*r.x);
-    double p,h,b;//x,y,z;
+    FLOAT sp = -2.0 * (r.y*r.z - r.w*r.x);
+    FLOAT p,h,b;//x,y,z;
     if(fabs(sp) > 0.999999)
     {
         p = 1.5707963267948965 * sp;
-        h = atan2((double) (-r.x*r.z + r.w*r.y),(double)(0.5-r.y*r.y-r.z*r.z));
+        h = atan2((FLOAT) (-r.x*r.z + r.w*r.y),(FLOAT)(0.5-r.y*r.y-r.z*r.z));
         b = 0.0;
     }
     else{
         p = H3DMath::ASin64(sp);
-        h = atan2((double)r.x*r.z + r.w*r.y,(double)0.5 - r.x*r.x - r.y*r.y);
-        b = atan2((double)r.x*r.y + r.w*r.z,(double)0.5 - r.x*r.x - r.z*r.z);
+        h = atan2((FLOAT)r.x*r.z + r.w*r.y,(FLOAT)0.5 - r.x*r.x - r.y*r.y);
+        b = atan2((FLOAT)r.x*r.y + r.w*r.z,(FLOAT)0.5 - r.x*r.x - r.z*r.z);
     }
     return CVector3f(p,h,b);
 }
 
 HMat33 CQuaternion::toHMat33( void ) const {
 	HMat33	mat;
-	float	wx, wy, wz;
-	float	xx, yy, yz;
-	float	xy, xz, zz;
-	float	x2, y2, z2;
+	FLOAT	wx, wy, wz;
+	FLOAT	xx, yy, yz;
+	FLOAT	xy, xz, zz;
+	FLOAT	x2, y2, z2;
 
 	x2 = x + x;
 	y2 = y + y;
@@ -150,10 +156,10 @@ HMat33 CQuaternion::toHMat33( void ) const {
 
 HMat44 CQuaternion::toHMat44( void ) const {
 	HMat44	t;
-	float	wx, wy, wz;
-	float	xx, yy, yz;
-	float	xy, xz, zz;
-	float	x2, y2, z2;
+	FLOAT	wx, wy, wz;
+	FLOAT	xx, yy, yz;
+	FLOAT	xy, xz, zz;
+	FLOAT	x2, y2, z2;
 
 	x2 = x + x;
 	y2 = y + y;
@@ -188,7 +194,7 @@ HMat44 CQuaternion::toHMat44( void ) const {
 
 
 	t.mat[ 0 ][ 3 ] = 0;
-	t.mat[ 1 ][ 3 ] = 0;	
+	t.mat[ 1 ][ 3 ] = 0;
 	t.mat[ 2 ][ 3 ] = 0;
 	t.mat[ 3 ][ 3 ] = 1;
 

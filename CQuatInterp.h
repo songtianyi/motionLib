@@ -39,17 +39,17 @@ public:
         ~CQuatInterp(void);
 
 		/*spherical linear interpolation*/
-        CQuaternion slerp(const CQuaternion &s, const CQuaternion &e,const float t);
-		void slerp(CQuaternion &rs,const CQuaternion &s,const CQuaternion &ee,const float t);
+        CQuaternion slerp(const CQuaternion &s, const CQuaternion &e,const FLOAT t);
+		void slerp(CQuaternion &rs,const CQuaternion &s,const CQuaternion &ee,const FLOAT t);
 
 		/*spAnmcterical and Quadrangle*/
-		void squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t);
+		void squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t);
 
 		/*spAnmcterical bezier curve*/
-		void sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t);
+		void sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t);
 
 		/*Catmull-Rom interpolation*/
-		void qCatmullRom(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t);
+		void qCatmullRom(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t);
 
         void slerp(CQuaternion *rot,const int n);//interpolation between rot[0] rot[n-1]
 		void squad(CQuaternion *rot,const int n,const CQuaternion &q0,const CQuaternion &q3);//rot[0] = q1,rot[n-1] = q2

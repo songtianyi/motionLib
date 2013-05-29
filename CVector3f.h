@@ -17,18 +17,16 @@
 #include <math.h>
 #include <stdio.h>
 #include "H3DMath.h"
+#include "def.h"
 
 #define pitch x //[-90,90]
 #define heading y//[-180 180]
 #define bank z//[-180 180]
 
-#ifndef OBJECTTOINERTIA
-#define OBJECTTOINERTIA 1
-#endif
 
-#ifndef INERTIATOOBJECT
+#define OBJECTTOINERTIA 1
 #define INERTIATOOBJECT 2
-#endif
+
 
 #ifdef MS_BUILD_ENV
 #pragma warning(disable:4244)
@@ -43,27 +41,27 @@ class CVector3f
 {
 public:
         CVector3f(void);
-        CVector3f(const float x,const float y,const float z);
+        CVector3f(const FLOAT x,const FLOAT y,const FLOAT z);
         ~CVector3f(void);
 
-        float			operator[]( const int index ) const;
-        float &			operator[]( const int index );
+        FLOAT			operator[]( const int index ) const;
+        FLOAT &			operator[]( const int index );
         CVector3f		operator-() const;
         CVector3f &		operator=( const CVector3f &a );		// required because of a msvc 6 & 7 bug
-        //float			operator*( const CVector3f &a ) const; //avoid confusion between dot and multiply
-        CVector3f		operator*( const float a ) const;
-        CVector3f		operator/( const float a ) const;
+        //FLOAT			operator*( const CVector3f &a ) const; //avoid confusion between dot and multiply
+        CVector3f		operator*( const FLOAT a ) const;
+        CVector3f		operator/( const FLOAT a ) const;
         CVector3f		operator+( const CVector3f &a ) const;
         CVector3f		operator-( const CVector3f &a ) const;
         CVector3f &		operator+=( const CVector3f &a );
         CVector3f &		operator-=( const CVector3f &a );
         CVector3f &		operator/=( const CVector3f &a );
-        CVector3f &		operator/=( const float a );
-        CVector3f &		operator*=( const float a );
+        CVector3f &		operator/=( const FLOAT a );
+        CVector3f &		operator*=( const FLOAT a );
 
-        friend CVector3f	operator*( const float a, const CVector3f b );
-        friend float        dotpdut(const CVector3f &a,const CVector3f &b);
-        float               dotpdut(const CVector3f &a);
+        friend CVector3f	operator*( const FLOAT a, const CVector3f b );
+        friend FLOAT        dotpdut(const CVector3f &a,const CVector3f &b);
+        FLOAT               dotpdut(const CVector3f &a);
         friend CVector3f    cropdut(const CVector3f &a,const CVector3f &b);
         CVector3f &		    cropdut( const CVector3f &a, const CVector3f &b );
         friend double       manhattnDist(const CVector3f &a, const CVector3f &b);//self defined manhattn distance
@@ -71,7 +69,7 @@ public:
 
 
 		//set
-		void setXYZ(const float x,const float y,const float z);
+		void setXYZ(const FLOAT x,const FLOAT y,const FLOAT z);
 
         /*vector3f as euler angle*/
         ///////////////////////////////
@@ -88,26 +86,27 @@ public:
 
 
 public:
-        float x,y,z;//if this is euler angle,pitch = x heading=y bank=z,float in degree
+        FLOAT x,y,z;//if this is euler angle,pitch = x heading=y bank=z,FLOAT in degree
 };
 
-//inline float CVector3f::operator*( const CVector3f &a ) const {
+//inline FLOAT CVector3f::operator*( const CVector3f &a ) const {
 //	return x * a.x + y * a.y + z * a.z;
 //}
 
-inline double euclideanDist(const CVector3f &a, const CVector3f &b)
+inline FLOAT euclideanDist(const CVector3f &a, const CVector3f &b)
 {
-	return sqrt ((a.x -b.x)*(a.x -b.x) +  (a.y - b.y)*(a.y - b.y) + (a.z-b.z)*(a.z-b.z) );
+        return ((a.x -b.x)*(a.x -b.x) +  (a.y - b.y)*(a.y - b.y) + (a.z-b.z)*(a.z-b.z) );
+        //return sqrt ((a.x -b.x)*(a.x -b.x) +  (a.y - b.y)*(a.y - b.y) + (a.z-b.z)*(a.z-b.z) );
 }
-inline double manhattanDist(const CVector3f &a, const CVector3f &b)
+inline FLOAT manhattanDist(const CVector3f &a, const CVector3f &b)
 {
     return ( fabs(a.x -b.x) + fabs(a.y - b.y) + fabs(a.z-b.z) );
 }
-inline float dotpdut(const CVector3f &a,const CVector3f &b)
+inline FLOAT dotpdut(const CVector3f &a,const CVector3f &b)
 {
     return a.x*b.x + a.y*b.y + a.z*b.z;
 }
-inline float CVector3f::dotpdut(const CVector3f &a)
+inline FLOAT CVector3f::dotpdut(const CVector3f &a)
 {
     return (a.x*x + a.y*y + a.z*z);
 }
@@ -123,16 +122,16 @@ inline CVector3f &CVector3f::cropdut( const CVector3f &a, const CVector3f &b ) {
 	return *this;
 }
 
-inline CVector3f operator*( const float a, const CVector3f b ) {
+inline CVector3f operator*( const FLOAT a, const CVector3f b ) {
 	return CVector3f( b.x * a, b.y * a, b.z * a );
 }
 inline CVector3f CVector3f::operator-( const CVector3f &a ) const {
-	return CVector3f( x - a.x, y - a.y, z - a.z );
+	return CVector3f( (FLOAT)(x - a.x), (FLOAT)(y - a.y), (FLOAT)(z - a.z) );
 }
-inline float CVector3f::operator[]( const int index ) const {
+inline FLOAT CVector3f::operator[]( const int index ) const {
 	return ( &x )[ index ];
 }
-inline float &CVector3f::operator[]( const int index ) {
+inline FLOAT &CVector3f::operator[]( const int index ) {
 	return ( &x )[ index ];
 }
 inline CVector3f CVector3f::operator-() const {
@@ -145,11 +144,11 @@ inline CVector3f &CVector3f::operator=( const CVector3f &a ) {
 	return *this;
 }
 
-inline CVector3f CVector3f::operator*( const float a ) const {
+inline CVector3f CVector3f::operator*( const FLOAT a ) const {
 	return CVector3f( x * a, y * a, z * a );
 }
-inline CVector3f CVector3f::operator/( const float a ) const {
-	float inva = 1.0f / a;
+inline CVector3f CVector3f::operator/( const FLOAT a ) const {
+	FLOAT inva = 1.0 / a;
 	return CVector3f( x * inva, y * inva, z * inva );
 }
 
@@ -170,8 +169,8 @@ inline CVector3f &CVector3f::operator/=( const CVector3f &a ) {
 
 	return *this;
 }
-inline CVector3f &CVector3f::operator/=( const float a ) {
-	float inva = 1.0f / a;
+inline CVector3f &CVector3f::operator/=( const FLOAT a ) {
+	FLOAT inva = 1.0 / a;
 	x *= inva;
 	y *= inva;
 	z *= inva;
@@ -186,7 +185,7 @@ inline CVector3f &CVector3f::operator-=( const CVector3f &a ) {
 	return *this;
 }
 
-inline CVector3f &CVector3f::operator*=( const float a ) {
+inline CVector3f &CVector3f::operator*=( const FLOAT a ) {
 	x *= a;
 	y *= a;
 	z *= a;

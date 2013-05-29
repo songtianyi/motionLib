@@ -19,10 +19,10 @@ class H3DMath
 {
 public:
     static float                ASin( const float a );			// arc sine with 32 bits precision, input is clamped to [-1, 1] to avoid a silent NaN
-    static double				ASin64( const float a );			// arc sine with 64 bits precision
+    static double				ASin64( const double a );			// arc sine with 64 bits precision
 
     static float				ACos( const float a );			// arc cosine with 32 bits precision, input is clamped to [-1, 1] to avoid a silent NaN
-	static double				ACos64( const float a );			// arc cosine with 64 bits precision
+	static double				ACos64( const double a );			// arc cosine with 64 bits precision
 	static double               WRAPPI(const double a);
 	static int                  complf(const double x);
 
@@ -90,7 +90,7 @@ inline float H3DMath::ASin(const float a ) {
 	return asinf( a );
 }
 
-inline double H3DMath::ASin64(const float a ) {
+inline double H3DMath::ASin64(const double a ) {
 	if ( a <= -1.0f ) {
 		return -HALF_PI;
 	}
@@ -110,7 +110,7 @@ inline float H3DMath::ACos(const float a ) {
 	return acosf( a );
 }
 
-inline double H3DMath::ACos64(const float a ) {
+inline double H3DMath::ACos64(const double a ) {
 	if ( a <= -1.0f ) {
 		return PI;
 	}

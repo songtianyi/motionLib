@@ -4,9 +4,9 @@ bool HMat44::InverseFastSelf(void)//
 {
 	//	6*8+2*6 = 60 multiplications
 	//	2*1 =  2 divisions
-	float r0[2][2], r1[2][2], r2[2][2], r3[2][2];
-	float a, det, invDet;
-	float *mat = reinterpret_cast<float *>(this);
+	FLOAT r0[2][2], r1[2][2], r2[2][2], r3[2][2];
+	FLOAT a, det, invDet;
+	FLOAT *mat = reinterpret_cast<FLOAT *>(this);
 
 	// r0 = m0.Inverse();
 	det = mat[0*4+0] * mat[1*4+1] - mat[0*4+1] * mat[1*4+0];

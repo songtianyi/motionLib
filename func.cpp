@@ -1,8 +1,8 @@
 #include "func.h"
 
-void __matrixMultiXYZ(float *rs,const float *a,const float *b,const int X,const int Y,const int Z)
+void __matrixMultiXYZ(FLOAT *rs,const FLOAT *a,const FLOAT *b,const int X,const int Y,const int Z)
 {
-    float *tmp = new float[X*Z];
+    FLOAT *tmp = new FLOAT[X*Z];
 	for(int i = 0;i < X*Z;i++)
 	{
 		tmp[i] = 0.0f;
@@ -17,10 +17,10 @@ void __matrixMultiXYZ(float *rs,const float *a,const float *b,const int X,const 
             }
         }
     }
-    memcpy(rs,tmp,sizeof(float)*X*Z);
+    memcpy(rs,tmp,sizeof(FLOAT)*X*Z);
     delete [] tmp; tmp = 0;
 }
-void 	Pitch(CVector3f tarVec,CVector3f curVec,float &pitch)//x
+void 	Pitch(CVector3f tarVec,CVector3f curVec,FLOAT &pitch)//x
 {
 	tarVec.x = 0;
 	tarVec.normalize();
@@ -31,7 +31,7 @@ void 	Pitch(CVector3f tarVec,CVector3f curVec,float &pitch)//x
 	{
 		pitch = 0;return;
 	}
-	float dot = dotpdut(tarVec,curVec);
+	FLOAT dot = dotpdut(tarVec,curVec);
 	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(curVec,tarVec);
@@ -49,7 +49,7 @@ void 	Pitch(CVector3f tarVec,CVector3f curVec,float &pitch)//x
 		pitch = 0;
 	}
 }
-void 	Yaw(CVector3f tarVec,CVector3f curVec,float &yaw)//y
+void 	Yaw(CVector3f tarVec,CVector3f curVec,FLOAT &yaw)//y
 {
 	tarVec.y = 0;
 	tarVec.normalize();
@@ -60,7 +60,7 @@ void 	Yaw(CVector3f tarVec,CVector3f curVec,float &yaw)//y
 	{
 		yaw = 0;return;
 	}
-	float dot = dotpdut(tarVec,curVec);
+	FLOAT dot = dotpdut(tarVec,curVec);
 	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(tarVec,curVec);
@@ -78,7 +78,7 @@ void 	Yaw(CVector3f tarVec,CVector3f curVec,float &yaw)//y
 		yaw = 0;
 	}
 }
-void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll)//z
+void 	Roll(CVector3f tarVec,CVector3f curVec,FLOAT &roll)//z
 {
 	tarVec.z = 0;
 	tarVec.normalize();
@@ -89,7 +89,7 @@ void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll)//z
 	{
 		roll = 0;return;
 	}
-	float dot = dotpdut(tarVec,curVec);
+	FLOAT dot = dotpdut(tarVec,curVec);
 	if (dot < 0.9999 && dot > -0.9999)
 	{
 		CVector3f axis = cropdut(tarVec,curVec);
@@ -111,10 +111,10 @@ void 	Roll(CVector3f tarVec,CVector3f curVec,float &roll)//z
 CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
 {
 	//Local Variables
-	double	cosAngle,turnAngle;
+	FLOAT	cosAngle,turnAngle;
 	CVector3f curVector,targetVector;
 	CQuaternion quat(0,0,0,1);
-	double IK_POS_THRESH = 0.000171473;
+	FLOAT IK_POS_THRESH = 0.0000029403;
 	// SEE IF I AM ALREADY CLOSE ENOUGH
 	if (euclideanDist(curEnd, desireEnd) > IK_POS_THRESH){
 			// CREATE THE VECTOR TO THE CURRENT EFFECTOR POS
@@ -133,11 +133,9 @@ CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
 			{
 				// USE THE CROSS PRODUCT TO CHECK WHICH WAY TO ROTATE
 				CVector3f crossResult = cropdut(curVector,targetVector);
-				crossResult.print();
 				crossResult.normalize();			//normalize the vector
 
-
-				turnAngle = acos((float)cosAngle);	// GET THE ANGLE
+				turnAngle = acos((FLOAT)cosAngle);	// GET THE ANGLE
 
 				//calculate quaternion
 				CQuaternion quat(\
@@ -152,3 +150,5 @@ CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
 	}
 	return quat;
 }
+
+

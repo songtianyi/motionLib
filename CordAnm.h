@@ -18,6 +18,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "def.h"
+#include "CVector3f.h"
 
 #ifdef MS_BUILD_ENV
 #pragma warning(disable:4244)
@@ -35,8 +37,8 @@ class CordAnm
 public:
     CordAnm();
     void getCordAnmHeader(const char *dir,HCordAnmHeader *pHead);
-    void restore(const char *dir,const HCordAnmHeader *pHead,const int *parent_of,const float *data);
-   void parse(const char *dir,HCordAnmHeader *pHead,int *parent_of,float *data);
+    void restore(const char *dir,const HCordAnmHeader *pHead,const int *parent_of,const CVector3f *data);
+    void parse(const char *dir,HCordAnmHeader *pHead,int *parent_of,CVector3f *data);
 };
 
 #endif // CORDANM_H

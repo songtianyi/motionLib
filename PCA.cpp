@@ -23,8 +23,8 @@ void PCA::_mySwap(int *a,int *b){
  *quickSort
  */
 
-void PCA::_quickSort(int left,int right,double array[],int id[]){
-    int i = left,j = right;double x = array[id[(left+right)/2]];
+void PCA::_quickSort(int left,int right,FLOAT array[],int id[]){
+    int i = left,j = right;FLOAT x = array[id[(left+right)/2]];
     do{
         while(array[id[i]] < x)i++;
         while(array[id[j]] > x)j--;//
@@ -35,10 +35,10 @@ void PCA::_quickSort(int left,int right,double array[],int id[]){
 }
 
 //----------------------------------------------
-void PCA::_Householder_Tri_Symetry_Diagonal(double a[], int n, double q[], double b[], double c[])
+void PCA::_Householder_Tri_Symetry_Diagonal(FLOAT a[], int n, FLOAT q[], FLOAT b[], FLOAT c[])
 {
 	int i, j, k, u;
-	double h, f, g, h2;
+	FLOAT h, f, g, h2;
 
 	for ( i = 0; i <= n-1; i++ )
 	{
@@ -137,10 +137,10 @@ void PCA::_Householder_Tri_Symetry_Diagonal(double a[], int n, double q[], doubl
 }
 //----------------------------------------------
 //----------------------------------------------
-int PCA::_Tri_Symmetry_Diagonal_Eigenvector(int n, double b[], double c[], double q[], double eps, int l)
+int PCA::_Tri_Symmetry_Diagonal_Eigenvector(int n, FLOAT b[], FLOAT c[], FLOAT q[], FLOAT eps, int l)
 {
 	int i, j, k, m, it, u, v;
-	double d, f, h, g, p, r, e, s;
+	FLOAT d, f, h, g, p, r, e, s;
 
 	c[n-1] = 0.0; d = 0.0; f = 0.0;
 	for ( j = 0; j <= n-1; j++ )
@@ -235,12 +235,12 @@ int PCA::_Tri_Symmetry_Diagonal_Eigenvector(int n, double b[], double c[], doubl
 
 //----------------------------------------------
 //----------------------------------------------
-int PCA::_calEigenVector(double CovMatrix[], int n, double Eigen[], double EigenVector[])
+int PCA::_calEigenVector(FLOAT CovMatrix[], int n, FLOAT Eigen[], FLOAT EigenVector[])
 {
 	int k;
-	double * subDiagonal;
+	FLOAT * subDiagonal;
 
-	subDiagonal = ( double * )malloc( sizeof( double ) * n );
+	subDiagonal = ( FLOAT * )malloc( sizeof( FLOAT ) * n );
 	_Householder_Tri_Symetry_Diagonal( CovMatrix, n, EigenVector, Eigen, subDiagonal );
 	k = _Tri_Symmetry_Diagonal_Eigenvector( n, Eigen, subDiagonal, EigenVector, PCA_EPS,PCA_ITERATION );
 	free( subDiagonal ); subDiagonal = 0;
@@ -251,9 +251,9 @@ int PCA::_calEigenVector(double CovMatrix[], int n, double Eigen[], double Eigen
 /**
  *a[r][s] X b[s][t] = [r][t]
  */
-void PCA::_matrixMulti(double *rs,const double *a,const double *b,const int r,const int s,const int t)
+void PCA::_matrixMulti(FLOAT *rs,const FLOAT *a,const FLOAT *b,const int r,const int s,const int t)
 {
-    double *tmp = new double[r*t];
+    FLOAT *tmp = new FLOAT[r*t];
 	for(int i = 0;i < r*t;i++)
 	{
 		tmp[i] = 0;
@@ -269,16 +269,16 @@ void PCA::_matrixMulti(double *rs,const double *a,const double *b,const int r,co
             }
         }
     }
-    memcpy(rs,tmp,sizeof(double)*r*t);
+    memcpy(rs,tmp,sizeof(FLOAT)*r*t);
     delete [] tmp; tmp = 0;
 }
 
 /**
  */
-void PCA::_matrixTransposition(double *m,const int row,const int col)
+void PCA::_matrixTransposition(FLOAT *m,const int row,const int col)
 {
     //row*col -> col*row;
-    double *tmp = new double[row*col];
+    FLOAT *tmp = new FLOAT[row*col];
     int it = 0;
     for(int i = 0;i < col;i++)
     {
@@ -288,13 +288,13 @@ void PCA::_matrixTransposition(double *m,const int row,const int col)
         }
     }
     assert(it == row*col);
-    memcpy(m,tmp,sizeof(double)*it);
+    memcpy(m,tmp,sizeof(FLOAT)*it);
     delete [] tmp; tmp = 0;
 }
 
 /**
  */
-void PCA::getCovaMat(const double *mat,const int row,const int col,double *covMat)
+void PCA::getCovaMat(const FLOAT *mat,const int row,const int col,FLOAT *covMat)
 {
     //calculate covariance matrix
     //symetric matrix cov(x,y) = cov(y,x)
@@ -303,7 +303,7 @@ void PCA::getCovaMat(const double *mat,const int row,const int col,double *covMa
 	{
 		for(int  k= j; k < col; k++)
 		{
-			double lMjk = 0;
+			FLOAT lMjk = 0;
 			for(int i = 0; i <row; i++)
 			{
 				lMjk += (mat[i*col + j ])*(mat[ i*col + k ]);
@@ -315,14 +315,14 @@ void PCA::getCovaMat(const double *mat,const int row,const int col,double *covMa
 }
 /**
  */
-void PCA::dimReduc(double *mat,const int row,const int col,int &dim,double *P)
+void PCA::dimReduc(FLOAT *mat,const int row,const int col,int &dim,FLOAT *P)
 {
-	double *covMat = new double[col*col];
+	FLOAT *covMat = new FLOAT[col*col];
 	getCovaMat(mat,row,col,covMat);
 
 	//calculate eigen vector
-	double *eigen_value = new double[col];
-	double *eigen_vector= new double[col*col];
+	FLOAT *eigen_value = new FLOAT[col];
+	FLOAT *eigen_vector= new FLOAT[col*col];
 	int k = _calEigenVector(covMat,col,eigen_value,eigen_vector);
 	delete [] covMat; covMat = 0;
 	if(k == -1)
@@ -368,7 +368,7 @@ void PCA::dimReduc(double *mat,const int row,const int col,int &dim,double *P)
 	assert(it == col*dim);
 	delete [] eigen_id; eigen_id = 0;
 	delete [] eigen_vector; eigen_vector = 0;
-    
+
     //row * col X col*dim = row * dim
     _matrixMulti(mat,mat,P,row,col,dim);
 }
@@ -376,7 +376,7 @@ void PCA::dimReduc(double *mat,const int row,const int col,int &dim,double *P)
  *mat,row X dim
  *P,  col X dim
  */
-void PCA::dimIncrs(double *mat,const int row,const int dim,const int col,double *P)
+void PCA::dimIncrs(FLOAT *mat,const int row,const int dim,const int col,FLOAT *P)
 {
     //rotate matrix ,col*dim -> dim*col;
     _matrixTransposition(P,col,dim);

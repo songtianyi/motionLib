@@ -23,6 +23,8 @@
 #include <cstring>
 #include <cassert>
 #include "CStack.h"
+#include "CVector3f.h"
+#include "def.h"
 using namespace std;
 
 
@@ -42,7 +44,7 @@ struct HBVHJoint
     int m_channelNum;//channel {3,6}
     int m_channels[6];//{0,1,2} - {X,Y,Z}
     char m_jointName[256];
-    float m_offset[3];//offset value
+    FLOAT m_offset[3];//offset value
 };
 struct HBVHHead
 {
@@ -52,7 +54,7 @@ struct HBVHHead
     int m_columNum;//column num
     int m_frameNum;//frame count or row num
 
-    float m_frameTime;//time per frame
+    FLOAT m_frameTime;//time per frame
 
     int *m_parentOf;
     bool *m_isEndSite;//note: you need to alloc memory your self, cause i don't know the memory size !
@@ -66,7 +68,7 @@ struct HBVHHead
         m_columNum=0;
         m_frameNum=0;
 
-        m_frameTime = 0.0f;
+        m_frameTime = 0.0;
     }
     ~HBVHHead()
     {
@@ -92,8 +94,8 @@ public:
         CBVHParser();
         ~CBVHParser();
         void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint);
-        void parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,float *mat);
-        void restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint *pJoint,const float *mat);
+        void parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,CVector3f *mat);
+        void restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint *pJoint,const CVector3f *mat);
 };
 
 #endif // CBVHPARSER_H

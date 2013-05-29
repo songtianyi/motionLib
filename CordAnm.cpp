@@ -15,7 +15,7 @@ void CordAnm::getCordAnmHeader(const char *dir,HCordAnmHeader *pHead)
 
     fclose(f); f = NULL;
 }
-void CordAnm::parse(const char *dir,HCordAnmHeader *pHead,int *parent_of,float *data)
+void CordAnm::parse(const char *dir,HCordAnmHeader *pHead,int *parent_of,CVector3f *data)
 {
     FILE *f = fopen(dir,"r");
     if(f == NULL)
@@ -31,15 +31,21 @@ void CordAnm::parse(const char *dir,HCordAnmHeader *pHead,int *parent_of,float *
 
     for(int i = 0;i < pHead->m_frameNum;i++)
     {
-        for(int j = 0;j < pHead->m_boneNum*3;j++)
+        int index = i * pHead->m_boneNum;
+        for(int j = 0;j < pHead->m_boneNum;j++)
         {
-            fscanf(f,"%f",&data[ i*(pHead->m_boneNum*3) + j ]);
+            #ifdef FLOAT_32
+            fscanf(f,"%f %f %f",&data[ index+ j ].x,&data[ index + j ].y,&data[ index + j ].z);
+            #endif
+            #ifdef FLOAT_64
+            fscanf(f,"%lf %lf %lf",&data[ index+ j ].x,&data[ index + j ].y,&data[ index + j ].z);
+            #endif
         }
         fscanf(f,"\n");
     }
     fclose(f); f = NULL;
 }
-void CordAnm::restore(const char *dir,const HCordAnmHeader *pHead,const int *parent_of,const float *data)
+void CordAnm::restore(const char *dir,const HCordAnmHeader *pHead,const int *parent_of,const CVector3f *data)
 {
     FILE *f = fopen(dir,"w");
     if(f == NULL)
@@ -55,11 +61,17 @@ void CordAnm::restore(const char *dir,const HCordAnmHeader *pHead,const int *par
 
     for(int i = 0;i < pHead->m_frameNum;i++)
     {
-        for(int j = 0;j < pHead->m_boneNum*3;j++)
+        int index = i * pHead->m_boneNum;
+        for(int j = 0;j < pHead->m_boneNum;j++)
         {
-            fprintf(f,"%f ",data[ i*(pHead->m_boneNum*3) + j ]);
+            #ifdef FLOAT_32
+                fprintf(f,"%f %f %f",&data[ index+ j ].x,&data[ index + j ].y,&data[ index + j ].z);
+            #endif
+            #ifdef FLOAT_64
+                fprintf(f,"%lf %lf %lf",&data[ index+ j ].x,&data[ index + j ].y,&data[ index + j ].z);
+            #endif
         }
-        fprintf(f,"\n");
+        fscanf(f,"\n");
     }
     fclose(f); f = NULL;
 }

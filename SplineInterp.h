@@ -33,7 +33,7 @@ public:
 	i belong to [0,n-2]
 	*/
 
-	void getCubicSplinePolynomial(const float *x,const CVector3f *y,CVector3f *coef,\
+	void getCubicSplinePolynomial(const FLOAT *x,const CVector3f *y,CVector3f *coef,\
 		const int n,const CVector3f &d20,const CVector3f &d2n);//
 
 	/*interpolation
@@ -44,10 +44,10 @@ public:
 	x ,x sequence
 	res_y, result y
 	*/
-	void getCubicSplineInterpValue(const CVector3f *coef,const int i,const float p_x,const float *x,CVector3f &res_y);
+	void getCubicSplineInterpValue(const CVector3f *coef,const int i,const FLOAT p_x,const FLOAT *x,CVector3f &res_y);
 private:
 	/*note: b and d will be overload*/
-	void thomas(float *a,float *b,float *c,CVector3f *x,CVector3f *d,const int n);//[0,n-1]
+	void thomas(FLOAT *a,FLOAT *b,FLOAT *c,CVector3f *x,CVector3f *d,const int n);//[0,n-1]
 
 private:
 

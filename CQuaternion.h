@@ -15,13 +15,12 @@
 
 #include <math.h>
 #include "H3DMath.h"
+#include "def.h"
 
-#ifndef OBJECTTOINERTIA
+
 #define OBJECTTOINERTIA 1
-#endif
-#ifndef INERTIATOOBJECT
 #define INERTIATOOBJECT 2
-#endif
+
 
 class CVector3f;
 class HMat33;
@@ -36,11 +35,11 @@ class CQuaternion
 {
 public:
         CQuaternion(void);
-        CQuaternion(const float x,const float y,const float z,const float w);
+        CQuaternion(const FLOAT x,const FLOAT y,const FLOAT z,const FLOAT w);
         ~CQuaternion(void);
 
-        float				operator[]( const int index ) const;
-        float &				operator[]( const int index );
+        FLOAT				operator[]( const int index ) const;
+        FLOAT &				operator[]( const int index );
 		CQuaternion			operator-() const;
 		CQuaternion &		operator=( const CQuaternion &a );
 		CQuaternion			operator+( const CQuaternion &a ) const;
@@ -48,15 +47,15 @@ public:
 		CQuaternion			operator-( const CQuaternion &a ) const;//(x-a,y-a,z-a,w-a)
 		CQuaternion &		operator-=( const CQuaternion &a );
 		CQuaternion			operator*( const CQuaternion &a ) const;//cross product
-		CQuaternion			operator*( const float a ) const;//(x*a,y*a,z*a,w*a)
-		CQuaternion			operator/(const float a)const;//(x/a,y/a,z/a,w/a)
+		CQuaternion			operator*( const FLOAT a ) const;//(x*a,y*a,z*a,w*a)
+		CQuaternion			operator/(const FLOAT a)const;//(x/a,y/a,z/a,w/a)
 		CQuaternion &		operator*=( const CQuaternion &a );
-		CQuaternion &		operator*=( const float a );
+		CQuaternion &		operator*=( const FLOAT a );
 
 
-		friend CQuaternion	operator*( const float a, const CQuaternion &b );
+		friend CQuaternion	operator*( const FLOAT a, const CQuaternion &b );
 		friend CQuaternion	diff(const CQuaternion &a,const CQuaternion &b);//if b*diff = a, calculate diff
-		friend float		dotpdut(const CQuaternion &a,const CQuaternion &b);//dot product
+		friend FLOAT		dotpdut(const CQuaternion &a,const CQuaternion &b);//dot product
 
 
 
@@ -76,15 +75,15 @@ public:
 		void print(void) const;
 
 public:
-        float w,x,y,z;
+        FLOAT w,x,y,z;
 
 };
 
-inline float CQuaternion::operator[]( const int index ) const {
+inline FLOAT CQuaternion::operator[]( const int index ) const {
 	assert( ( index > -1 ) && ( index < 4 ) );
 	return ( &x )[ index ];
 }
-inline float &CQuaternion::operator[]( const int index ) {
+inline FLOAT &CQuaternion::operator[]( const int index ) {
 	assert( ( index > -1 ) && ( index < 4 ) );
 	return ( &x )[ index ];
 }
@@ -135,14 +134,14 @@ inline CQuaternion CQuaternion::operator*( const CQuaternion &a ) const {
 					w*a.w - x*a.x - y*a.y - z*a.z );
 }
 
-inline CQuaternion CQuaternion::operator*( float a ) const {
+inline CQuaternion CQuaternion::operator*( FLOAT a ) const {
 	return CQuaternion( x * a, y * a, z * a, w * a );
 }
-inline CQuaternion CQuaternion::operator/( float a ) const {
+inline CQuaternion CQuaternion::operator/( FLOAT a ) const {
 	assert(a != 0);
 	return CQuaternion( x/a, y/a, z/a, w/a );
 }
-inline CQuaternion operator*( const float a, const CQuaternion &b ) {
+inline CQuaternion operator*( const FLOAT a, const CQuaternion &b ) {
 	return b * a;
 }
 
@@ -152,7 +151,7 @@ inline CQuaternion& CQuaternion::operator*=( const CQuaternion &a ) {
 }
 
 
-inline CQuaternion& CQuaternion::operator*=( float a ) {
+inline CQuaternion& CQuaternion::operator*=( FLOAT a ) {
 	x *= a;
 	y *= a;
 	z *= a;
@@ -160,7 +159,7 @@ inline CQuaternion& CQuaternion::operator*=( float a ) {
 
 	return (*this);
 }
-inline float dotpdut(const CQuaternion &a,const CQuaternion &b)
+inline FLOAT dotpdut(const CQuaternion &a,const CQuaternion &b)
 {
 	return (a.w*b.w + a.x*b.x + a.y*b.y + a.z*b.z);
 }

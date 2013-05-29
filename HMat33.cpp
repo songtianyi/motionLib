@@ -8,21 +8,21 @@ CQuaternion		HMat33::toQuat( void ) const
 	//Input matrix:
 
 
-	float m11 = mat[0][0],m12 = mat[0][1],m13 = mat[0][2];
-	float m21 = mat[1][0],m22 = mat[1][1],m23 = mat[1][2];
-	float m31 = mat[2][0],m32 = mat[2][1],m33 = mat[2][2];
+	FLOAT m11 = mat[0][0],m12 = mat[0][1],m13 = mat[0][2];
+	FLOAT m21 = mat[1][0],m22 = mat[1][1],m23 = mat[1][2];
+	FLOAT m31 = mat[2][0],m32 = mat[2][1],m33 = mat[2][2];
 	//Output quaternion
 
-	float w,x,y,z;
+	FLOAT w,x,y,z;
 	// Determine which of w, x, y, or z has the largest absolute value
 
-	float fourWSquaredMinus1 = m11 +  m22 +  m33;
-	float fourXSquaredMinus1 = m11 -  m22 - m33;
-	float fourYSquaredMinus1 = m22 -  m11 - m33;
-	float fourZSquaredMinus1 = m33 -  m11 - m22;
+	FLOAT fourWSquaredMinus1 = m11 +  m22 +  m33;
+	FLOAT fourXSquaredMinus1 = m11 -  m22 - m33;
+	FLOAT fourYSquaredMinus1 = m22 -  m11 - m33;
+	FLOAT fourZSquaredMinus1 = m33 -  m11 - m22;
 
 	int biggestIndex = 0;
-	float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+	FLOAT fourBiggestSquaredMinus1 = fourWSquaredMinus1;
 
 	if (fourXSquaredMinus1 > fourBiggestSquaredMinus1)
 	{
@@ -40,8 +40,8 @@ CQuaternion		HMat33::toQuat( void ) const
 		biggestIndex = 3;
 	}
 	// Perform square root and division
-	float biggestVal = sqrt(fourBiggestSquaredMinus1 + 1.0f) * 0.5f;
-	float mult = 0.25f / biggestVal;
+	FLOAT biggestVal = sqrt(fourBiggestSquaredMinus1 + 1.0f) * 0.5f;
+	FLOAT mult = 0.25f / biggestVal;
 	// Apply table to compute quaternion values
 
 	switch (biggestIndex)

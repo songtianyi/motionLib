@@ -12,7 +12,7 @@ CQuatInterp::~CQuatInterp(void)
 void CQuatInterp::slerp(CQuaternion *rot,const int n)
 {
     CQuaternion s = rot[0],e = rot[n-1];
-	float cosa = s.w*e.w + s.x*e.x + s.y*e.y + s.z*e.z;
+	FLOAT cosa = s.w*e.w + s.x*e.x + s.y*e.y + s.z*e.z;
 	if ( cosa < 0.0f ) {
 		e.w = -e.w;
 		e.x = -e.x;
@@ -22,8 +22,8 @@ void CQuatInterp::slerp(CQuaternion *rot,const int n)
 	}
 	for(int i = 1;i < n-1;i++)
 	{
-	    float t = 1.0*i / (n-1);
-        float k0, k1;
+	    FLOAT t = 1.0*i / (n-1);
+        FLOAT k0, k1;
         if ( cosa > 0.999999 )
         {
             k0 = 1.0 - t;
@@ -31,9 +31,9 @@ void CQuatInterp::slerp(CQuaternion *rot,const int n)
         }
         else
         {
-            float sina = sqrt( 1.0 - cosa*cosa );
-            float a = atan2( sina, cosa );
-            float invSina = 1.0 / sina;
+            FLOAT sina = sqrt( 1.0 - cosa*cosa );
+            FLOAT a = atan2( sina, cosa );
+            FLOAT invSina = 1.0 / sina;
             k0 = sin((1.0 - t)*a) * invSina;
             k1 = sin(t*a) * invSina;
         }
@@ -45,10 +45,10 @@ void CQuatInterp::slerp(CQuaternion *rot,const int n)
 	}
 }
 
-CQuaternion CQuatInterp::slerp(const CQuaternion &s,const CQuaternion &ee,const float t)
+CQuaternion CQuatInterp::slerp(const CQuaternion &s,const CQuaternion &ee,const FLOAT t)
 {
     CQuaternion rs,e = ee;
-    double cosa = s.w*e.w + s.x*e.x + s.y*e.y + s.z*e.z;
+    FLOAT cosa = s.w*e.w + s.x*e.x + s.y*e.y + s.z*e.z;
 
 	if ( cosa < 0.0 ) {
 		e.w = -e.w;
@@ -58,15 +58,15 @@ CQuaternion CQuatInterp::slerp(const CQuaternion &s,const CQuaternion &ee,const 
 		cosa = -cosa;
 	}
 
-    double k0, k1;
+    FLOAT k0, k1;
     if ( cosa > 0.999999 ) {
         k0 = 1.0 - t;
         k1 = t;
     }
     else {
-        double sina = sqrt( 1.0 - cosa*cosa );
-        double a = atan2( sina, cosa );
-        double invSina = 1.0 / sina;
+        FLOAT sina = sqrt( 1.0 - cosa*cosa );
+        FLOAT a = atan2( sina, cosa );
+        FLOAT invSina = 1.0 / sina;
         k0 = sin((1.0 - t)*a) * invSina;
         k1 = sin(t*a) * invSina;
     }
@@ -76,13 +76,13 @@ CQuaternion CQuatInterp::slerp(const CQuaternion &s,const CQuaternion &ee,const 
     rs.z = ( s.z*k0 + e.z*k1 );
     return rs;
 }
-void CQuatInterp::slerp(CQuaternion &rs,const CQuaternion &s,const CQuaternion &ee,const float t)
+void CQuatInterp::slerp(CQuaternion &rs,const CQuaternion &s,const CQuaternion &ee,const FLOAT t)
 {
 	rs = slerp(s,ee,t);
 }
 
 
-void CQuatInterp::squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t)
+void CQuatInterp::squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t)
 {
 /*
 	//direct X
@@ -103,7 +103,7 @@ void CQuatInterp::squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion 
 */
 	//
 	CQuaternion ss1,ss2,rss;
-	
+
 	//formulation
 	//s1 = exp(( -(log(q2*Inv(q1)) + log( q0*Inv(q1)) ) )/4)q1
 	//s2 = exp(( -(log(q3*Inv(q2)) + log( q1*Inv(q2)) ) )/4)q2
@@ -116,12 +116,12 @@ void CQuatInterp::squad(CQuaternion &rs,const CQuaternion &q0,const CQuaternion 
 	rs = rss;
 
 }
-	
+
 void CQuatInterp::squad(CQuaternion *rot,const int n,const CQuaternion &q0,const CQuaternion &q3)//rot[0] = q1,rot[n-1] = q2
 {
 	for(int i = 1;i < n-1;i++)
 	{
-		float t = 1.0f/n-1;
+		FLOAT t = 1.0f/n-1;
 		squad(rot[i],q0,rot[0],rot[n-1],q3,t);
 	}
 }
@@ -134,7 +134,7 @@ CQuaternion CQuatInterp::_Double(const CQuaternion &p,const CQuaternion &q)
 {
 	return (2*(dotpdut(p,q))*q) - p;
 }
-void CQuatInterp::sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t)
+void CQuatInterp::sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t)
 {
 	//qn-1 = q0,qn = q1,qn+1 = q2 qn+2 = q3
 	CQuaternion an = _Bisect(_Double(q0,q1),q2);//an
@@ -148,7 +148,7 @@ void CQuatInterp::sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternio
 	p00.x = q1.x; p10.x = an.x; p20.x = bn1.x; p30.x = q2.x;
 	p00.y = q1.y; p10.y = an.y; p20.y = bn1.y; p30.y = q2.y;
 	p00.z = q1.z; p10.z = an.z; p20.z = bn1.z; p30.z = q2.z;
-	
+
 	D3DXQUATERNION p01,p11,p21,p02,p12,p03;
 
 	D3DXQuaternionSlerp(&p01,&p00,&p10,t);//p01
@@ -164,7 +164,7 @@ void CQuatInterp::sbezier(CQuaternion &rs,const CQuaternion &q0,const CQuaternio
 
 */
 }
-void CQuatInterp::qCatmullRom(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const float t)
+void CQuatInterp::qCatmullRom(CQuaternion &rs,const CQuaternion &q0,const CQuaternion &q1,const CQuaternion &q2,const CQuaternion &q3,const FLOAT t)
 {
 /* Direct X
 	D3DXQUATERNION p00,p10,p20,p30;
@@ -172,7 +172,7 @@ void CQuatInterp::qCatmullRom(CQuaternion &rs,const CQuaternion &q0,const CQuate
 	p00.x = q0.x; p10.x = q1.x; p20.x = q2.x; p30.x = q3.x;
 	p00.y = q0.y; p10.y = q1.y; p20.y = q2.y; p30.y = q3.y;
 	p00.z = q0.z; p10.z = q1.z; p20.z = q2.z; p30.z = q3.z;
-	
+
 	D3DXQUATERNION p01,p11,p21,p02,p12,p03;
 
 	D3DXQuaternionSlerp(&p01,&p00,&p10,t+1);//p01

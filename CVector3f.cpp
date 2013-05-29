@@ -8,11 +8,11 @@ CVector3f::CVector3f()
     //ctor
     x = y = z = 0.0f;
 }
-void CVector3f::setXYZ(const float x,const float y,const float z)
+void CVector3f::setXYZ(const FLOAT x,const FLOAT y,const FLOAT z)
 {
 	this->x = x; this->y = y; this->z = z;
 }
-CVector3f::CVector3f(const float x,const float y,const float z)
+CVector3f::CVector3f(const FLOAT x,const FLOAT y,const FLOAT z)
 {
     this->x = x; this->y = y; this->z = z;
 }
@@ -22,7 +22,13 @@ CVector3f::~CVector3f()
 }
 void CVector3f::print() const
 {
+    #ifdef FLOAT_32
 	printf("(%f %f %f)",x,y,z);
+	#endif
+
+	#ifdef FLOAT_64
+	printf("(%0.9f %0.9f %0.9f)",x,y,z);
+	#endif // FLOAT_64
 }
 void CVector3f::canonize()
 {
@@ -67,7 +73,7 @@ void CVector3f::canonize()
 
 CVector3f CVector3f::canonized()const
 {
-    float tmp1 = pitch,tmp2 = heading,tmp3 = bank;
+    FLOAT tmp1 = pitch,tmp2 = heading,tmp3 = bank;
 
     tmp1    *= H3DMath::M_DEG2RAD;
     tmp2    *= H3DMath::M_DEG2RAD;
@@ -110,28 +116,28 @@ CVector3f CVector3f::canonized()const
 }
 CVector3f CVector3f::normalized() const
 {
-    double squmrt = sqrt((double)x*x+(double)y*y+(double)z*z);
+    FLOAT squmrt = sqrt((FLOAT)x*x+(FLOAT)y*y+(FLOAT)z*z);
     if( squmrt )
-        return CVector3f( (double)x/squmrt,(double)y/squmrt,(double)z/squmrt);
+        return CVector3f( (FLOAT)x/squmrt,(FLOAT)y/squmrt,(FLOAT)z/squmrt);
     return *this;
 }
 void CVector3f::normalize()
 {
-    double squmrt = sqrt((double)x*x+(double)y*y+(double)z*z);
+    FLOAT squmrt = sqrt((FLOAT)x*x+(FLOAT)y*y+(FLOAT)z*z);
     if(  squmrt )
 	{
-        x = (double)x/squmrt; y = (double)y/squmrt; z = (double)z/squmrt;
+        x = (FLOAT)x/squmrt; y = (FLOAT)y/squmrt; z = (FLOAT)z/squmrt;
 	}
 }
 CQuaternion CVector3f::toQuat(const int type)
 {
     //INERTIATOOBJECT
     CQuaternion rs;
-    double p = x*H3DMath::M_DEG2RAD,h = y*H3DMath::M_DEG2RAD,b = z*H3DMath::M_DEG2RAD;
-    rs.w = (float)( cos(h/2)*cos(p/2)*cos(b/2) + sin(h/2)*sin(p/2)*sin(b/2));
-    rs.x = (float)(-cos(h/2)*sin(p/2)*cos(b/2) - sin(h/2)*cos(p/2)*sin(b/2));
-    rs.y = (float)( cos(h/2)*sin(p/2)*sin(b/2) - sin(h/2)*cos(p/2)*cos(b/2));
-    rs.z = (float)( sin(h/2)*sin(p/2)*cos(b/2) - cos(h/2)*cos(p/2)*sin(b/2));
+    FLOAT p = x*H3DMath::M_DEG2RAD,h = y*H3DMath::M_DEG2RAD,b = z*H3DMath::M_DEG2RAD;
+    rs.w = (FLOAT)( cos(h/2)*cos(p/2)*cos(b/2) + sin(h/2)*sin(p/2)*sin(b/2));
+    rs.x = (FLOAT)(-cos(h/2)*sin(p/2)*cos(b/2) - sin(h/2)*cos(p/2)*sin(b/2));
+    rs.y = (FLOAT)( cos(h/2)*sin(p/2)*sin(b/2) - sin(h/2)*cos(p/2)*cos(b/2));
+    rs.z = (FLOAT)( sin(h/2)*sin(p/2)*cos(b/2) - cos(h/2)*cos(p/2)*sin(b/2));
     if(type == OBJECTTOINERTIA)
     {
         rs = rs.conjugated();
