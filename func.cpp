@@ -129,7 +129,7 @@ CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
 
 			assert(! (fabs(cosAngle)-0.0000001 > 1));//fabscosAngle = [0,1]
 			// IF THE DOT PRODUCT RETURNS 1.0, I DON'T NEED TO ROTATE AS IT IS 0 DEGREES
-			if(cosAngle < 0.999999)
+			if(cosAngle < 0.99999999999)
 			{
 				// USE THE CROSS PRODUCT TO CHECK WHICH WAY TO ROTATE
 				CVector3f crossResult = cropdut(curVector,targetVector);
@@ -150,5 +150,4 @@ CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd)
 	}
 	return quat;
 }
-
 

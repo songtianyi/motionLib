@@ -9,7 +9,7 @@ CBVHParser::~CBVHParser()
 {
     //dtor
 }
-void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
+void CBVHParser::getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
 {
     FILE *bvh = fopen(dir,"r");
     if( bvh == NULL )
@@ -17,15 +17,14 @@ void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
         printf("[open file error] %s\n",dir);
         return;
     }
-        char buffer[256];
+    char buffer[256];
     CStack my(BVH_MAX_JOINT+1);
 
     //initialization
     memset(pHeader->m_parentOf,-1,sizeof(int)*(BVH_MAX_JOINT+1));
     memset(pHeader->m_isEndSite,0,sizeof(bool)*(BVH_MAX_JOINT+1));
 
-
-    pHeader->m_parentOf[1] = 0;
+    pHeader->m_jointNum = -1;
 
     //hierarchy construct
     while( fscanf(bvh,"%s",buffer) != EOF )
@@ -38,7 +37,7 @@ void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
         {
             int c = my.top(); my.pop();
 
-            if(c == 1)
+            if(c == 0)
             {
                 //back to root
                 break;
@@ -104,7 +103,7 @@ void getBVHHeader(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint)
     fscanf(bvh," MOTION Frames:%d Frame Time:%lf",&pHeader->m_frameNum,&pHeader->m_frameTime);
 #endif // FLOAT_64
 
-
+    pHeader->m_jointNum++;
     assert((6 + (pHeader->m_jointNum - pHeader->m_endSiteNum - 1)*3) == pHeader->m_columNum);
     assert(pHeader->m_frameNum < BVH_MAX_FRAME);
     assert(pHeader->m_jointNum < BVH_MAX_JOINT);
@@ -127,8 +126,7 @@ void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,CVect
     memset(pHeader->m_parentOf,-1,sizeof(int)*(BVH_MAX_JOINT+1));
     memset(pHeader->m_isEndSite,0,sizeof(bool)*(BVH_MAX_JOINT+1));
 
-
-    pHeader->m_parentOf[1] = 0;
+    pHeader->m_jointNum = -1;
 
     //hierarchy construct
     while( fscanf(bvh,"%s",buffer) != EOF )
@@ -141,7 +139,7 @@ void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,CVect
         {
             int c = my.top(); my.pop();
 
-            if(c == 1)
+            if(c == 0)
             {
                 //back to root
                 break;
@@ -207,11 +205,12 @@ void CBVHParser::parse(const char *dir,HBVHHead *pHeader,HBVHJoint *pJoint,CVect
     #ifdef FLOAT_64
     fscanf(bvh," MOTION Frames:%d Frame Time:%lf",&pHeader->m_frameNum,&pHeader->m_frameTime);
     #endif // FLOAT_64
+    pHeader->m_jointNum += 1;
     assert((6 + (pHeader->m_jointNum - pHeader->m_endSiteNum - 1)*3) == pHeader->m_columNum);
     assert(pHeader->m_frameNum < BVH_MAX_FRAME);
     assert(pHeader->m_jointNum < BVH_MAX_JOINT);
     assert(pHeader->m_columNum % 3 == 0);
-    int nVecNum = pHeader->m_frameNum*pHeader->m_columNum%3;
+    int nVecNum = pHeader->m_frameNum*pHeader->m_columNum/3;
 
     for(int i = 0;i < nVecNum;i++)
     {

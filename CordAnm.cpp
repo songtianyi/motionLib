@@ -71,7 +71,7 @@ void CordAnm::restore(const char *dir,const HCordAnmHeader *pHead,const int *par
                 fprintf(f,"%lf %lf %lf",data[ index+ j ].x,data[ index + j ].y,data[ index + j ].z);
             #endif
         }
-        fscanf(f,"\n");
+        fprintf(f,"\n");
     }
     fclose(f); f = NULL;
 }

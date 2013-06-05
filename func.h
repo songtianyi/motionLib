@@ -15,8 +15,10 @@
 #define FUNC_H
 
 #include <string.h>
+#include <stdlib.h>
 #include "CVector3f.h"
 #include "CQuaternion.h"
+#include "def.h"
 
 /*
  *@brief matrix multiplication
@@ -44,6 +46,5 @@ void 	Roll(CVector3f tarVec,CVector3f curVec,FLOAT &roll);//z
  *
  */
 CQuaternion CCD(CVector3f root,CVector3f curEnd,CVector3f desireEnd);
-
 
 #endif
