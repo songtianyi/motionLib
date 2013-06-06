@@ -240,8 +240,8 @@ void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint
     }
     fprintf(re,"HIERARCHY\n");
 
-    CStack my(BVH_MAX_JOINT+1); my.push(0);
-    for(int i = 1 ;i <= pHeader->m_jointNum;i++)
+    CStack my(BVH_MAX_JOINT+1); my.push(-1);
+    for(int i = 0;i < pHeader->m_jointNum;i++)
     {
         while(pHeader->m_parentOf[i] != my.top())
         {
@@ -250,7 +250,7 @@ void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint
         }
         assert(pHeader->m_parentOf[i] == my.top());
 
-        if(i == 1)
+        if(i == 0)
         {
             fprintf(re,"ROOT %s\n{\n\tOFFSET %.5f %.5f %.5f\n\tCHANNELS %d %cposition %cposition %cposition %crotation %crotation %crotation\n",\
                 pJoint[i].m_jointName,\
@@ -273,15 +273,15 @@ void CBVHParser::restore(const char *dir,const HBVHHead *pHeader,const HBVHJoint
         }
         my.push(i);
     }
-    while(my.top() != 0){fprintf(re,"}\n");my.pop();}
+    while(my.top() != -1){fprintf(re,"}\n");my.pop();}
     my.free();
     fprintf(re,"MOTION\nFrames: %d\nFrame Time: %f\n",pHeader->m_frameNum,pHeader->m_frameTime);
     assert(pHeader->m_columNum % 3 == 0);
     for(int i = 0;i < pHeader->m_frameNum;i++)
     {
-        const CVector3f *array = &mat[i*pHeader->m_columNum%3];
+        const CVector3f *array = &mat[i*pHeader->m_columNum/3];
         fprintf(re,"%0.4f %0.4f %0.4f",array[0].x,array[0].y,array[0].z);
-        for(int j = 1;j < pHeader->m_columNum;j++)
+        for(int j = 1;j < pHeader->m_columNum/3;j++)
         {
             fprintf(re," %0.4f %0.4f %0.4f",array[j].x,array[j].y,array[j].z);
         }

@@ -65,10 +65,10 @@ void CordAnm::restore(const char *dir,const HCordAnmHeader *pHead,const int *par
         for(int j = 0;j < pHead->m_boneNum;j++)
         {
             #ifdef FLOAT_32
-                fprintf(f,"%f %f %f",data[ index+ j ].x,data[ index + j ].y,data[ index + j ].z);
+                fprintf(f,"%f %f %f ",data[ index+ j ].x,data[ index + j ].y,data[ index + j ].z);
             #endif
             #ifdef FLOAT_64
-                fprintf(f,"%lf %lf %lf",data[ index+ j ].x,data[ index + j ].y,data[ index + j ].z);
+                fprintf(f,"%lf %lf %lf ",data[ index+ j ].x,data[ index + j ].y,data[ index + j ].z);
             #endif
         }
         fprintf(f,"\n");

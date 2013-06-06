@@ -360,62 +360,100 @@ void GLPOS::getGLPosOneFrameAllBone(CVector3f *glPos,\
 		delete [] parent_of; parent_of = 0;
 }
 
-void GLPOS::__getTransMat(FLOAT *mat,const CVector3f &offset,const CVector3f &euler,const int *channels)
+void GLPOS::_getTransMatrix(FLOAT rs[][4],int f,int j,int end_num,\
+                     const HBVHHead *pHead,\
+                     const HBVHJoint *pJoints,\
+                     const CVector3f *mat)
 {
-    CVector3f rn;
+    ///T*R
 
-    for(int i = 0;i < 3;i++)
+    //rs = T
+    FLOAT T[4][4] = {
+        {1,0,0,pJoints[j].m_offset[0]},
+        {0,1,0,pJoints[j].m_offset[1]},
+        {0,0,1,pJoints[j].m_offset[2]},
+        {0,0,0,1}};
+    memcpy(rs,T,sizeof(T));
+
+    //rs = rs*R
+    FLOAT vec[3];
+    vec[0] = mat[f*pHead->m_columNum/3].x;
+    vec[1] = mat[f*pHead->m_columNum/3].y;
+    vec[2] = mat[f*pHead->m_columNum/3].z;
+    int i = 0;
+    if(pJoints[j].m_channelNum == 6)
     {
-        rn[channels[i]] = euler[i];
-    }
-    rn *= H3DMath::M_DEG2RAD;//degree to radian
-    mat[0] = 1; mat[1] = 0; mat[2] = 0; mat[3] = offset.x;
-    mat[4] = 0; mat[5] = 1; mat[6] = 0; mat[7] = offset.y;
-    mat[8] = 0; mat[9] = 0; mat[10] = 1; mat[11] = offset.z;
-    mat[12] = 0; mat[13] = 0; mat[14] = 0; mat[15] = 1;//right hand
-    //T*R
-    FLOAT Rx[16] = {
-        1,0,0,0,
-        0,cos(rn.x),-sin(rn.x),0,
-        0,sin(rn.x),cos(rn.x),0,
-        0,0,0,1
-    };
-    FLOAT Ry[16] = {
-        cos(rn.y),0,sin(rn.y),0,
-        0,1,0,0,
-        -sin(rn.y),0,cos(rn.y),0,
-        0,0,0,1
-    };
-    FLOAT Rz[16] = {
-        cos(rn.z),-sin(rn.z),0,0,
-        sin(rn.z),cos(rn.z),0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-    for(int i = 0;i < 3;i++)
-    {
-        if(channels[i] == 0)
+        //root joint
+        for(;i < 3;i++)
         {
-            //x
-            __matrixMultiXYZ(mat,(const FLOAT *)mat,(const FLOAT *)Rx,4,4,4);
-        }
-        else if(channels[i] == 1)
-        {
-            //y
-            __matrixMultiXYZ(mat,(const FLOAT *)mat,(const FLOAT *)Ry,4,4,4);
-        }
-        else if(channels[i] == 2)
-        {
-            //z
-            __matrixMultiXYZ(mat,(const FLOAT *)mat,(const FLOAT *)Rz,4,4,4);
+            //position
+            if(pJoints[j].m_channels[i] == 0)
+            {
+                //Xposition
+                FLOAT t[4][4] = {
+                    {1,0,0,vec[i]},
+                    {0,1,0,0},
+                    {0,0,1,0},
+                    {0,0,0,1} };
+                __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+            }
+            else if(pJoints[j].m_channels[i] == 1)
+            {
+                //Yposition
+                FLOAT t[4][4] = {
+                    {1,0,0,0},
+                    {0,1,0,vec[i]},
+                    {0,0,1,0},
+                    {0,0,0,1} };
+                __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+            }
+            else{
+                //Zposition
+                FLOAT t[4][4] = {
+                    {1,0,0,0},
+                    {0,1,0,0},
+                    {0,0,1,vec[i]},
+                    {0,0,0,1} };
+                __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+            }
         }
     }
 
+    int off_col = (j+1-end_num);
+    vec[0] = mat[f*pHead->m_columNum/3 +  off_col].x;
+    vec[1] = mat[f*pHead->m_columNum/3 +  off_col].y;
+    vec[2] = mat[f*pHead->m_columNum/3 +  off_col].z;
+
+    for(int k = 0;k < 3;i++,k++)
+    {
+        //rotation
+        FLOAT x = vec[k]*H3DMath::M_DEG2RAD;
+        if(pJoints[j].m_channels[i] == 0)
+        {
+            //Xrotation
+            FLOAT t[4][4] = { {1,0,0,0},{0,cos(x),-sin(x),0},{0,sin(x),cos(x),0},{0,0,0,1} };
+            __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+        }
+        else if(pJoints[j].m_channels[i] == 1)
+        {
+            //Yrotation
+            FLOAT t[4][4] = { {cos(x),0,sin(x),0},{0,1,0,0},{-sin(x),0,cos(x),0},{0,0,0,1} };
+            __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+        }
+        else{
+            //Zrotation
+            FLOAT t[4][4] = { {cos(x),-sin(x),0,0},{sin(x),cos(x),0,0},{0,0,1,0},{0,0,0,1} };
+            __matrixMultiXYZ((FLOAT *)rs,(const FLOAT *)rs,(const FLOAT *)t,4,4,4);
+        }
+    }
 }
+
+
 void GLPOS::getGLPos(CVector3f *glpos,const HBVHHead *pHead,const HBVHJoint *pJoints,const CVector3f *mat)
 {
-    assert(pHead->m_parentOf[0] == -1);
-    FLOAT *M = new FLOAT[16*pHead->m_jointNum];
+    const FLOAT unitM[4][4] = { {1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1} };//unit matrix
+    FLOAT *M = new FLOAT[pHead->m_jointNum * 16];
+    memcpy(&M[0*16],unitM,sizeof(unitM));
     for(int i = 0;i < pHead->m_frameNum;i++)
     {
         int end_num = 0;
@@ -424,23 +462,14 @@ void GLPOS::getGLPos(CVector3f *glpos,const HBVHHead *pHead,const HBVHJoint *pJo
             if(pHead->m_isEndSite[j] == false)
             {
                 //M[parent_of[j]]*R(channels[0])*R()...
-                FLOAT trans[16];
-                CVector3f offset;
-                if(j == 0)
+                FLOAT trans[4][4];
+                _getTransMatrix(trans,i,j,end_num,pHead,pJoints,mat);
+                if(pHead->m_parentOf[j] == -1)
                 {
-                    offset[pJoints[j].m_channels[0]] = mat[i*pHead->m_columNum/3].x;
-                    offset[pJoints[j].m_channels[1]] = mat[i*pHead->m_columNum/3].y;
-                    offset[pJoints[j].m_channels[2]] = mat[i*pHead->m_columNum/3].z;
-                    offset = mat[i*pHead->m_columNum/3];
+                    memcpy(&M[j*16],trans,sizeof(trans));
                 }
                 else
-                    offset.setXYZ(pJoints[j].m_offset[0],pJoints[j].m_offset[1],pJoints[j].m_offset[2]);
-                __getTransMat(trans,offset,\
-                              mat[i * pHead->m_columNum/3 + j + 1 - end_num],&pJoints[j].m_channels[pJoints[j].m_channelNum-3]);
-                if(j == 0)
-                    memcpy(&M[j*16],trans,sizeof(FLOAT)*16);
-                else
-                    __matrixMultiXYZ(&M[j*16],(const FLOAT *)&M[pHead->m_parentOf[j]*16],(const FLOAT *)trans,4,4,4);
+                    __matrixMultiXYZ(&M[j*16], (const FLOAT *)&M[pHead->m_parentOf[j]*16], (const FLOAT *)trans,4,4,4);
             }
             else end_num++;
 
@@ -450,20 +479,15 @@ void GLPOS::getGLPos(CVector3f *glpos,const HBVHHead *pHead,const HBVHJoint *pJo
             if(j == 0)
             {
                 FLOAT S[4] = {0,0,0,1};
-                __matrixMultiXYZ(S,&M[0*16],S,4,4,1);
+                __matrixMultiXYZ((FLOAT *)&S,(const FLOAT *)&M[0*16],(const FLOAT *)S,4,4,1);
                 memcpy(&glpos[i*pHead->m_jointNum + 0],S,3*sizeof(FLOAT));
             }
             else{
 
                 FLOAT E[4] = {pJoints[j].m_offset[0],pJoints[j].m_offset[1],pJoints[j].m_offset[2],1};
-                __matrixMultiXYZ(E,&M[ pHead->m_parentOf[j] * 16],E,4,4,1);
+                __matrixMultiXYZ((FLOAT *)E,(const FLOAT *)&M[ pHead->m_parentOf[j]*16 ],(const FLOAT *)E,4,4,1);
                 memcpy(&glpos[i*pHead->m_jointNum + j],E,3*sizeof(FLOAT));
             }
-            printf("%f %f %f ",glpos[i*pHead->m_jointNum + j].x,glpos[i*pHead->m_jointNum + j].y,glpos[i*pHead->m_jointNum + j].z);
-
-
-        }printf("\n");
+        }
     }
-    delete [] M; M = 0;
-
 }

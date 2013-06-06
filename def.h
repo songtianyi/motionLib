@@ -15,7 +15,7 @@
 
 
 #define INDEX(row,col,rowLen) (row*rowLen+col)
-//#define MS_BUILD_ENV
+#define MS_BUILD_ENV
 //#define DIRECTX_ENABLE
 #define FLOAT_64
 //#define FLOAT_32

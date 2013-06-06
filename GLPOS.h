@@ -49,7 +49,10 @@ public:
     /*glpos_row = frame
      glpos_col = bone_num
     */
-    void __getTransMat(FLOAT *mat,const CVector3f &offset,const CVector3f &euler,const int *channels);
 	void getGLPos(CVector3f *glpos,const HBVHHead *pHead,const HBVHJoint *pJoints,const CVector3f *mat);
+	void _getTransMatrix(FLOAT rs[][4],int f,int j,int end_num,\
+                     const HBVHHead *pHead,\
+                     const HBVHJoint *pJoints,\
+                     const CVector3f *mat);
 };
 #endif
